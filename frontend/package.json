@@ -1,0 +1,15 @@
+{
+  "name": "courselens-frontend",
+  "private": true,
+  "scripts": {
+    "dev": "npm run dev --prefix ..",
+    "build": "npm run build --prefix ..",
+    "start": "npm run start --prefix ..",
+    "lint": "npm run lint --prefix .."
+  },
+  "dependencies": {
+    "@google/generative-ai": "^0.24.1",
+    "groq-sdk": "^1.1.2",
+    "react-range": "^1.10.0"
+  }
+}
