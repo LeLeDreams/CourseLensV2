@@ -11,6 +11,7 @@
   "dependencies": {
     "@google/generative-ai": "^0.24.1",
     "@headlessui/react": "^2.2.10",
+    "@phosphor-icons/react": "^2.1.10",
     "@radix-ui/react-slider": "^1.3.6",
     "@supabase/supabase-js": "^2.101.1",
     "groq-sdk": "^1.1.2",

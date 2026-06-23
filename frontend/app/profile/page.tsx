@@ -129,7 +129,7 @@ export default function Profile() {
 
     return (<>
     
-    <div className="flex min-h-0 flex-1 items-center justify-center bg-[#f8f9fa]">
+    <div className="flex min-h-0 flex-1 items-center justify-center bg-background">
         <div className="w-[500px]">
             <div className="bg-white shadow-[0_0_20px_rgba(0,0,0,0.2),0_5px_5px_rgba(0,0,0,0.24)] p-[45px] text-center mt-6">
                 <h1 className="text-[#2868ce] text-3xl font-bold mb-6">Profile</h1>

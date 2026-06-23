@@ -121,7 +121,7 @@ export async function GET(req: NextRequest) {
       else if (sort === "credits") sortField = "effective_credits";
       query = query.order(sortField, {
         ascending: direction === "asc",
-        nullsFirst: false, // TODO: Use nullsFirst = True to track down the nulls in database and fix them by scraping/populating their values
+        nullsFirst: false,
       });
     }
 
@@ -134,55 +134,7 @@ export async function GET(req: NextRequest) {
       return NextResponse.json({ error: error.message }, { status: 500 });
     }
 
-    // Filtering moved DB-side via `level` / `effective_credits` columns
-    // (see add_level_and_effective_credits.sql). Post-page JS filtering caused
-    // sparse pages and incorrect `total`, and defaulted unknown credits to 0
-    // which dropped them. Old block kept commented for reference.
-    // 2026-05-06: superseded by DB-side .or() filters above.
-    /*
-    let filtered = (data || []).filter((course: any) => {
-      const digits = String(course.code || "").match(/\d+/);
-      const num = digits ? parseInt(digits[0], 10) : NaN;
-      if (Number.isFinite(num)) {
-        let level: number;
-        if (num < 100) return false;
-        else if (num < 200) level = 100;
-        else if (num < 300) level = 200;
-        else if (num < 400) level = 300;
-        else if (num < 500) level = 400;
-        else if (num < 600) level = 500;
-        else level = 600;
-        if (level < minLevel || level > maxLevel) return false;
-      }
-
-      const credits = course.credits ?? course.max_credits ?? 0;
-      if (credits < minCredits || credits > maxCredits) return false;
-
-      return true;
-    });
-    */
     let filtered = data || [];
-
-    // 2026-05-06: superseded by DB-side .order(..., { nullsFirst: false })
-    // above. The in-memory sort only re-ordered within a single page, so
-    // unrated rows on page N could appear before rated rows on page N+1.
-    /*
-    if (sort && sort !== "") {
-      const sortField = sort === "gpa" ? "avg_gpa" : sort;
-      const isNumeric = ["rating", "difficulty", "avg_gpa"].includes(sortField);
-      if (isNumeric) {
-        filtered.sort((a: any, b: any) => {
-          const aVal = a[sortField] || 0;
-          const bVal = b[sortField] || 0;
-          const aZero = aVal === 0;
-          const bZero = bVal === 0;
-          if (aZero && !bZero) return 1;
-          if (!aZero && bZero) return -1;
-          return direction === "asc" ? aVal - bVal : bVal - aVal;
-        });
-      }
-    }
-    */
 
     return NextResponse.json({
       data: filtered,

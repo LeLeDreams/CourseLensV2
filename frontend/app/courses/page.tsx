@@ -6,6 +6,7 @@ import { Slider } from "@/components/Slider";
 import { Listbox, ListboxButton, ListboxOption, ListboxOptions } from "@headlessui/react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { Suspense, useEffect, useRef, useState } from "react";
+import { ArrowDown, ArrowUp, CaretDown, X } from "@phosphor-icons/react";
 
 const MAX_COMPARE = 4;
 
@@ -83,7 +84,7 @@ export default function CoursesPage() {
   // useSearchParams requires a Suspense boundary for static prerendering
   // (Next 16 App Router). Inner component holds all the existing logic.
   return (
-    <Suspense fallback={<div className="min-h-full flex-1 bg-gray-50" />}>
+    <Suspense fallback={<div className="min-h-full flex-1 bg-background" />}>
       <CoursesPageInner />
     </Suspense>
   );
@@ -399,7 +400,7 @@ function CoursesPageInner() {
   const canLoadMore = visibleCourses.length < totalCount;
 
   return (
-    <div className="min-h-full flex-1 bg-gray-50 pb-32">
+    <div className="min-h-full flex-1 bg-background pb-32">
       <div className="mx-auto max-w-7xl px-4 py-8">
         <div className="mb-6 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
           <h2 className="text-xl font-semibold text-gray-800">Browse Courses</h2>
@@ -407,7 +408,7 @@ function CoursesPageInner() {
             <button
               type="button"
               onClick={() => setRequestModalOpen(true)}
-              className="shrink-0 rounded-lg border border-blue-200 bg-white px-4 py-2 text-sm font-medium text-blue-700 shadow-sm hover:bg-blue-50"
+              className="shrink-0 rounded-lg border border-[#91AC8F] bg-white px-4 py-2 text-sm font-medium text-[#4B5945] shadow-sm hover:bg-[#B2C9AD]/20"
             >
               Request a class
             </button>
@@ -422,7 +423,7 @@ function CoursesPageInner() {
             placeholder="Search by name, code, or professor..."
             value={inputQ}
             onChange={handleSearchChange}
-            className="w-full rounded-lg border border-gray-300 px-4 py-2 text-sm text-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="w-full rounded-lg border border-gray-300 px-4 py-2 text-sm text-gray-900 focus:outline-none focus:ring-2 focus:ring-[#91AC8F]"
           />
           <select
             value={college}
@@ -447,15 +448,15 @@ function CoursesPageInner() {
         </div>
 
         <div className="flex flex-col gap-6 lg:flex-row">
-          <aside className="w-full rounded-xl border border-gray-200 bg-white p-4 shadow-sm lg:sticky lg:top-4 lg:h-fit lg:w-72">
-            <h3 className="mb-4 text-lg font-semibold text-gray-800">Filters</h3>
+          <aside className="w-full rounded-xl bg-[#4B5945] p-4 shadow-sm lg:sticky lg:top-4 lg:h-fit lg:w-72">
+            <h3 className="mb-4 text-lg font-semibold text-white">Filters</h3>
 
             <div className="mb-5">
-              <label className="mb-2 block text-sm font-medium text-gray-700">College</label>
+              <label className="mb-2 block text-sm font-medium text-[#B2C9AD]">College</label>
               <Listbox value={college} onChange={handleCollegeChange}>
-                <ListboxButton className="flex w-full items-center justify-between rounded-lg border border-gray-300 px-3 py-2 text-left text-sm text-gray-900 transition-colors hover:bg-gray-50 data-open:bg-gray-50">
+                <ListboxButton className="flex w-full items-center justify-between rounded-lg border border-[#66785F] px-3 py-2 text-left text-sm text-white transition-colors hover:bg-[#66785F] data-open:bg-[#66785F]">
                   {college || "All Colleges"}
-                  <span className="text-lg">▼</span>
+                  <CaretDown size={14} weight="bold" />
                 </ListboxButton>
                 <ListboxOptions
                   anchor="bottom"
@@ -464,7 +465,7 @@ function CoursesPageInner() {
                 >
                   <ListboxOption
                     value=""
-                    className="cursor-pointer rounded px-3 py-2 text-sm text-gray-900 transition-colors data-focus:bg-blue-50"
+                    className="cursor-pointer rounded px-3 py-2 text-sm text-gray-900 transition-colors data-focus:bg-[#B2C9AD]/40"
                   >
                     All Colleges
                   </ListboxOption>
@@ -472,7 +473,7 @@ function CoursesPageInner() {
                     <ListboxOption
                       key={col}
                       value={col}
-                      className="cursor-pointer rounded px-3 py-2 text-sm text-gray-900 transition-colors data-focus:bg-blue-50"
+                      className="cursor-pointer rounded px-3 py-2 text-sm text-gray-900 transition-colors data-focus:bg-[#B2C9AD]/40"
                     >
                       {col}
                     </ListboxOption>
@@ -482,11 +483,11 @@ function CoursesPageInner() {
             </div>
 
             <div className="mb-5">
-              <label className="mb-2 block text-sm font-medium text-gray-700">Department</label>
+              <label className="mb-2 block text-sm font-medium text-[#B2C9AD]">Department</label>
               <Listbox value={department} onChange={handleDepartmentChange}>
-                <ListboxButton className="flex w-full items-center justify-between rounded-lg border border-gray-300 px-3 py-2 text-left text-sm text-gray-900 transition-colors hover:bg-gray-50 data-open:bg-gray-50">
+                <ListboxButton className="flex w-full items-center justify-between rounded-lg border border-[#66785F] px-3 py-2 text-left text-sm text-white transition-colors hover:bg-[#66785F] data-open:bg-[#66785F]">
                   {department || "All Departments"}
-                  <span className="text-lg">▼</span>
+                  <CaretDown size={14} weight="bold" />
                 </ListboxButton>
                 <ListboxOptions
                   anchor="bottom"
@@ -495,7 +496,7 @@ function CoursesPageInner() {
                 >
                   <ListboxOption
                     value=""
-                    className="cursor-pointer rounded px-3 py-2 text-sm text-gray-900 transition-colors data-focus:bg-blue-50"
+                    className="cursor-pointer rounded px-3 py-2 text-sm text-gray-900 transition-colors data-focus:bg-[#B2C9AD]/40"
                   >
                     All Departments
                   </ListboxOption>
@@ -503,7 +504,7 @@ function CoursesPageInner() {
                     <ListboxOption
                       key={dept}
                       value={dept}
-                      className="cursor-pointer rounded px-3 py-2 text-sm text-gray-900 transition-colors data-focus:bg-blue-50"
+                      className="cursor-pointer rounded px-3 py-2 text-sm text-gray-900 transition-colors data-focus:bg-[#B2C9AD]/40"
                     >
                       {dept}
                     </ListboxOption>
@@ -512,11 +513,11 @@ function CoursesPageInner() {
               </Listbox>
             </div>
 
-            <div className="mb-4 space-y-3 border-t border-gray-200 pt-4">
+            <div className="mb-4 space-y-3 border-t border-[#91AC8F] pt-4">
               <Listbox value={sortBy} onChange={handleSortChange}>
-                <ListboxButton className="flex w-full items-center justify-between rounded-lg border border-gray-300 px-3 py-2 text-left text-sm text-gray-900 transition-colors hover:bg-gray-50 data-open:bg-gray-50">
+                <ListboxButton className="flex w-full items-center justify-between rounded-lg border border-[#66785F] px-3 py-2 text-left text-sm text-white transition-colors hover:bg-[#66785F] data-open:bg-[#66785F]">
                   {sortByLabel(sortBy)}
-                  <span className="text-lg">▼</span>
+                  <CaretDown size={14} weight="bold" />
                 </ListboxButton>
                 <ListboxOptions
                   anchor="bottom"
@@ -525,43 +526,43 @@ function CoursesPageInner() {
                 >
                   <ListboxOption
                     value=""
-                    className="cursor-pointer rounded px-3 py-2 text-sm text-gray-900 transition-colors data-focus:bg-blue-50"
+                    className="cursor-pointer rounded px-3 py-2 text-sm text-gray-900 transition-colors data-focus:bg-[#B2C9AD]/40"
                   >
                     None
                   </ListboxOption>
                   <ListboxOption
                     value="code"
-                    className="cursor-pointer rounded px-3 py-2 text-sm text-gray-900 transition-colors data-focus:bg-blue-50"
+                    className="cursor-pointer rounded px-3 py-2 text-sm text-gray-900 transition-colors data-focus:bg-[#B2C9AD]/40"
                   >
                     Code
                   </ListboxOption>
                   <ListboxOption
                     value="name"
-                    className="cursor-pointer rounded px-3 py-2 text-sm text-gray-900 transition-colors data-focus:bg-blue-50"
+                    className="cursor-pointer rounded px-3 py-2 text-sm text-gray-900 transition-colors data-focus:bg-[#B2C9AD]/40"
                   >
                     Name
                   </ListboxOption>
                   <ListboxOption
                     value="rating"
-                    className="cursor-pointer rounded px-3 py-2 text-sm text-gray-900 transition-colors data-focus:bg-blue-50"
+                    className="cursor-pointer rounded px-3 py-2 text-sm text-gray-900 transition-colors data-focus:bg-[#B2C9AD]/40"
                   >
                     Rating
                   </ListboxOption>
                   <ListboxOption
                     value="difficulty"
-                    className="cursor-pointer rounded px-3 py-2 text-sm text-gray-900 transition-colors data-focus:bg-blue-50"
+                    className="cursor-pointer rounded px-3 py-2 text-sm text-gray-900 transition-colors data-focus:bg-[#B2C9AD]/40"
                   >
                     Difficulty
                   </ListboxOption>
                   <ListboxOption
                     value="gpa"
-                    className="cursor-pointer rounded px-3 py-2 text-sm text-gray-900 transition-colors data-focus:bg-blue-50"
+                    className="cursor-pointer rounded px-3 py-2 text-sm text-gray-900 transition-colors data-focus:bg-[#B2C9AD]/40"
                   >
                     Avg Grade
                   </ListboxOption>
                   <ListboxOption
                     value="credits"
-                    className="cursor-pointer rounded px-3 py-2 text-sm text-gray-900 transition-colors data-focus:bg-blue-50"
+                    className="cursor-pointer rounded px-3 py-2 text-sm text-gray-900 transition-colors data-focus:bg-[#B2C9AD]/40"
                   >
                     Credits
                   </ListboxOption>
@@ -570,9 +571,12 @@ function CoursesPageInner() {
 
               {sortBy && (
                 <Listbox value={sortDirection} onChange={handleSortDirectionChange}>
-                  <ListboxButton className="flex w-full items-center justify-between rounded-lg border border-gray-300 px-3 py-2 text-left text-sm text-gray-900 transition-colors hover:bg-gray-50 data-open:bg-gray-50">
-                    {sortDirection === "asc" ? "↑ Ascending" : "↓ Descending"}
-                    <span className="text-lg">▼</span>
+                  <ListboxButton className="flex w-full items-center justify-between rounded-lg border border-[#66785F] px-3 py-2 text-left text-sm text-white transition-colors hover:bg-[#66785F] data-open:bg-[#66785F]">
+                    <span className="flex items-center gap-1.5">
+                      {sortDirection === "asc" ? <ArrowUp size={13} weight="bold" /> : <ArrowDown size={13} weight="bold" />}
+                      {sortDirection === "asc" ? "Ascending" : "Descending"}
+                    </span>
+                    <CaretDown size={14} weight="bold" />
                   </ListboxButton>
                   <ListboxOptions
                     anchor="bottom"
@@ -581,28 +585,28 @@ function CoursesPageInner() {
                   >
                     <ListboxOption
                       value="asc"
-                      className="cursor-pointer rounded px-3 py-2 text-sm text-gray-900 transition-colors data-focus:bg-blue-50"
+                      className="cursor-pointer rounded px-3 py-2 text-sm text-gray-900 transition-colors data-focus:bg-[#B2C9AD]/40"
                     >
-                      ↑ Ascending
+                      <span className="flex items-center gap-1.5"><ArrowUp size={13} weight="bold" /> Ascending</span>
                     </ListboxOption>
                     <ListboxOption
                       value="desc"
-                      className="cursor-pointer rounded px-3 py-2 text-sm text-gray-900 transition-colors data-focus:bg-blue-50"
+                      className="cursor-pointer rounded px-3 py-2 text-sm text-gray-900 transition-colors data-focus:bg-[#B2C9AD]/40"
                     >
-                      ↓ Descending
+                      <span className="flex items-center gap-1.5"><ArrowDown size={13} weight="bold" /> Descending</span>
                     </ListboxOption>
                   </ListboxOptions>
                 </Listbox>
               )}
             </div>
 
-            <div className="relative mb-4 border-t border-gray-200 pt-4">
+            <div className="relative mb-4 border-t border-[#91AC8F] pt-4">
               <Listbox value="" onChange={() => {}}>
-                <ListboxButton className="flex w-full items-center justify-between rounded-lg px-3 py-3 text-left font-semibold text-gray-800 transition-colors hover:bg-gray-100 data-open:bg-gray-100">
-                  <span className="text-sm">
+                <ListboxButton className="flex w-full items-center justify-between rounded-lg px-3 py-3 text-left text-white transition-colors hover:bg-[#66785F] data-open:bg-[#66785F]">
+                  <span className="text-sm font-semibold">
                     Credits: {creditsRange[0]}-{creditsRange[1] === 6 ? "6+" : creditsRange[1]}
                   </span>
-                  <span className="text-lg">▼</span>
+                  <CaretDown size={14} weight="bold" />
                 </ListboxButton>
                 <ListboxOptions
                   anchor="bottom"
@@ -626,13 +630,13 @@ function CoursesPageInner() {
               </Listbox>
             </div>
 
-            <div className="relative border-t border-gray-200 pt-4">
+            <div className="relative border-t border-[#91AC8F] pt-4">
               <Listbox value="" onChange={() => {}}>
-                <ListboxButton className="flex w-full items-center justify-between rounded-lg px-3 py-3 text-left font-semibold text-gray-800 transition-colors hover:bg-gray-100 data-open:bg-gray-100">
-                  <span className="text-sm">
+                <ListboxButton className="flex w-full items-center justify-between rounded-lg px-3 py-3 text-left text-white transition-colors hover:bg-[#66785F] data-open:bg-[#66785F]">
+                  <span className="text-sm font-semibold">
                     Level: {courseLevelRange[0]}-{courseLevelRange[1] === 600 ? "600+" : courseLevelRange[1]}
                   </span>
-                  <span className="text-lg">▼</span>
+                  <CaretDown size={14} weight="bold" />
                 </ListboxButton>
                 <ListboxOptions
                   anchor="bottom"
@@ -722,16 +726,16 @@ function CoursesPageInner() {
             {selectedCoursesOrdered.map((c) => (
               <span
                 key={c.id}
-                className="inline-flex items-center gap-1.5 rounded-full bg-sky-100 px-2.5 py-0.5 text-xs font-bold text-blue-900"
+                className="inline-flex items-center gap-1.5 rounded-full bg-[#B2C9AD] px-2.5 py-0.5 text-xs font-bold text-[#4B5945]"
               >
                 {c.code}
                 <button
                   type="button"
                   onClick={() => toggleCompare(c.id)}
-                  className="font-black leading-none text-blue-900 hover:text-blue-700"
+                  className="leading-none text-[#4B5945] hover:text-[#66785F]"
                   aria-label={`Remove ${c.code} from comparison`}
                 >
-                  ×
+                  <X size={14} weight="bold" />
                 </button>
               </span>
             ))}
@@ -752,7 +756,7 @@ function CoursesPageInner() {
               if (selectedForCompare.size < 2) return;
               router.push(`/courses/compare?ids=${Array.from(selectedForCompare).join(",")}`);
             }}
-            className="rounded-xl bg-blue-600 px-4 py-2.5 text-sm font-bold text-white shadow-sm transition hover:bg-blue-700 disabled:cursor-not-allowed disabled:opacity-50"
+            className="rounded-xl bg-[#4B5945] px-4 py-2.5 text-sm font-bold text-white shadow-sm transition hover:bg-[#66785F] disabled:cursor-not-allowed disabled:opacity-50"
           >
             Compare selected
           </button>

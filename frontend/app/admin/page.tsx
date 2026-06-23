@@ -206,14 +206,14 @@ export default function AdminPage() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+      <div className="min-h-screen bg-background flex items-center justify-center">
         <p className="text-sm text-gray-400">Loading...</p>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-background">
       <div className="mx-auto max-w-3xl px-6 py-10">
 
         <div className="mb-8">
@@ -231,7 +231,7 @@ export default function AdminPage() {
           <div className="flex items-center gap-2 mb-4">
             <h2 className="text-base font-semibold text-gray-800">Pending</h2>
             {pending.length > 0 && (
-              <span className="bg-blue-100 text-blue-700 text-xs font-semibold px-2 py-0.5 rounded-full">
+              <span className="bg-[#B2C9AD] text-[#4B5945] text-xs font-semibold px-2 py-0.5 rounded-full">
                 {pending.length}
               </span>
             )}
@@ -344,7 +344,7 @@ function RequestCard({
               <button
                 onClick={() => onApproveOpen(req)}
                 disabled={isLoading}
-                className="rounded-lg bg-blue-600 px-4 py-2 text-sm font-semibold text-white hover:bg-blue-700 disabled:opacity-50 transition-colors"
+                className="rounded-lg bg-[#4B5945] px-4 py-2 text-sm font-semibold text-white hover:bg-[#66785F] disabled:opacity-50 transition-colors"
               >
                 Approve
               </button>
@@ -362,15 +362,15 @@ function RequestCard({
 
       {/* Approve edit panel */}
       {isApproveOpen && editDraft && (
-        <div className="border-t border-blue-100 bg-blue-50 px-5 py-4">
-          <p className="text-sm font-semibold text-blue-700 mb-3">Review & edit before approving</p>
+        <div className="border-t border-[#B2C9AD] bg-[#B2C9AD]/20 px-5 py-4">
+          <p className="text-sm font-semibold text-[#4B5945] mb-3">Review & edit before approving</p>
           <div className="grid grid-cols-2 gap-3 mb-3">
             <div>
               <label className="block text-xs font-medium text-gray-600 mb-1">Subject</label>
               <input
                 value={editDraft.subject}
                 onChange={(e) => onEditDraftChange({ ...editDraft, subject: e.target.value })}
-                className="w-full rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm text-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-300"
+                className="w-full rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm text-gray-900 focus:outline-none focus:ring-2 focus:ring-[#91AC8F]"
               />
             </div>
             <div>
@@ -378,7 +378,7 @@ function RequestCard({
               <input
                 value={editDraft.course_number}
                 onChange={(e) => onEditDraftChange({ ...editDraft, course_number: e.target.value })}
-                className="w-full rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm text-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-300"
+                className="w-full rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm text-gray-900 focus:outline-none focus:ring-2 focus:ring-[#91AC8F]"
               />
             </div>
           </div>
@@ -387,7 +387,7 @@ function RequestCard({
             <input
               value={editDraft.class_name}
               onChange={(e) => onEditDraftChange({ ...editDraft, class_name: e.target.value })}
-              className="w-full rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm text-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-300"
+              className="w-full rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm text-gray-900 focus:outline-none focus:ring-2 focus:ring-[#91AC8F]"
             />
           </div>
           <div className="mb-3">
@@ -395,7 +395,7 @@ function RequestCard({
             <input
               value={editDraft.professor_name}
               onChange={(e) => onEditDraftChange({ ...editDraft, professor_name: e.target.value })}
-              className="w-full rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm text-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-300"
+              className="w-full rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm text-gray-900 focus:outline-none focus:ring-2 focus:ring-[#91AC8F]"
             />
           </div>
           <div className="mb-3">
@@ -403,7 +403,7 @@ function RequestCard({
             <select
               value={editDraft.semester}
               onChange={(e) => onEditDraftChange({ ...editDraft, semester: e.target.value })}
-              className="w-full rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm text-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-300"
+              className="w-full rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm text-gray-900 focus:outline-none focus:ring-2 focus:ring-[#91AC8F]"
             >
               {SEMESTERS.map((s) => (
                 <option key={s} value={s}>{s}</option>
@@ -416,7 +416,7 @@ function RequestCard({
               value={editDraft.description}
               onChange={(e) => onEditDraftChange({ ...editDraft, description: e.target.value })}
               rows={2}
-              className="w-full rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm text-gray-900 resize-none focus:outline-none focus:ring-2 focus:ring-blue-300"
+              className="w-full rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm text-gray-900 resize-none focus:outline-none focus:ring-2 focus:ring-[#91AC8F]"
             />
           </div>
           <div className="flex gap-2">
@@ -429,7 +429,7 @@ function RequestCard({
             <button
               onClick={() => onApproveConfirm(req)}
               disabled={isLoading}
-              className="flex-1 rounded-lg bg-blue-600 px-4 py-2 text-sm font-semibold text-white hover:bg-blue-700 disabled:opacity-50 transition-colors"
+              className="flex-1 rounded-lg bg-[#4B5945] px-4 py-2 text-sm font-semibold text-white hover:bg-[#66785F] disabled:opacity-50 transition-colors"
             >
               {isLoading ? "Approving..." : "Confirm Approve"}
             </button>

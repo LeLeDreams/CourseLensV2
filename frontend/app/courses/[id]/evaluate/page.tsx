@@ -7,6 +7,7 @@ import type { Course } from "@/types/course";
 import type { User } from "@supabase/supabase-js";
 import Link from "next/link";
 import { useParams, useRouter } from "next/navigation";
+import { ArrowLeft } from "@phosphor-icons/react";
 import { useEffect, useState } from "react";
 
 
@@ -202,7 +203,7 @@ export default function EvaluateCoursePage() {
 
   if (loading) {
     return (
-      <div className="flex min-h-[50vh] flex-1 items-center justify-center bg-gray-50">
+      <div className="flex min-h-[50vh] flex-1 items-center justify-center bg-background">
         <p className="text-gray-500">Loading...</p>
       </div>
     );
@@ -210,7 +211,7 @@ export default function EvaluateCoursePage() {
 
   if (!course) {
     return (
-      <div className="flex min-h-[50vh] flex-1 items-center justify-center bg-gray-50 px-4">
+      <div className="flex min-h-[50vh] flex-1 items-center justify-center bg-background px-4">
         <p className="text-gray-500 text-center">Course not found.</p>
       </div>
     );
@@ -218,7 +219,7 @@ export default function EvaluateCoursePage() {
 
   if (sessionUser && studentProfileId === null) {
     return (
-      <div className="flex min-h-[50vh] flex-1 items-center justify-center bg-gray-50 px-4">
+      <div className="flex min-h-[50vh] flex-1 items-center justify-center bg-background px-4">
         <div className="bg-white border border-gray-200 rounded-xl p-8 max-w-md text-center shadow-sm">
           <p className="text-gray-800 mb-2">Could not create your student profile.</p>
           {profileSetupError && (
@@ -229,7 +230,7 @@ export default function EvaluateCoursePage() {
             <code className="text-xs bg-gray-100 px-1 rounded">data_management/supabase_course_evaluations.sql</code>{" "}
             (it drops the <code className="text-xs bg-gray-100 px-1">auth.users</code> foreign key, adds grants, and fixes RLS). Then refresh this page.
           </p>
-          <Link href={`/courses/${courseId}`} className="text-blue-600 text-sm hover:underline">
+          <Link href={`/courses/${courseId}`} className="text-[#4B5945] text-sm hover:text-[#66785F] hover:underline">
             Back to course
           </Link>
         </div>
@@ -239,14 +240,14 @@ export default function EvaluateCoursePage() {
 
   if (!sessionUser) {
     return (
-      <div className="flex min-h-[50vh] flex-1 items-center justify-center bg-gray-50 px-4">
+      <div className="flex min-h-[50vh] flex-1 items-center justify-center bg-background px-4">
         <div className="bg-white border border-gray-200 rounded-xl p-8 max-w-md w-full text-center shadow-sm">
-          <p className="text-xs font-semibold text-blue-700 bg-blue-100 inline-block px-2 py-1 rounded-full">{course.code}</p>
+          <p className="text-xs font-semibold bg-[#B2C9AD]/50 text-[#4B5945] inline-block px-2 py-1 rounded-full">{course.code}</p>
           <p className="text-lg font-semibold text-gray-900 mt-2">{course.name}</p>
           <p className="text-gray-800 mt-4 mb-4">Sign in to add an evaluation for this course.</p>
           <Link
             href={redirectToLogin}
-            className="inline-block bg-blue-600 text-white px-5 py-2 rounded-lg text-sm font-medium hover:bg-blue-700"
+            className="inline-block bg-[#4B5945] text-white px-5 py-2 rounded-lg text-sm font-medium hover:bg-[#66785F]"
           >
             Sign in
           </Link>
@@ -256,10 +257,10 @@ export default function EvaluateCoursePage() {
   }
 
   return (
-    <div className="min-h-full flex-1 bg-gray-50">
+    <div className="min-h-full flex-1 bg-background">
       <main className="mx-auto max-w-xl px-4 py-8">
-        <Link href={`/courses/${courseId}`} className="text-sm text-blue-600 hover:underline mb-6 inline-block">
-          ← Back to course
+        <Link href={`/courses/${courseId}`} className="mb-6 inline-flex items-center gap-1.5 text-sm text-[#4B5945] hover:text-[#66785F] transition-colors">
+          <ArrowLeft size={14} weight="bold" /> Back to course
         </Link>
 
 
@@ -279,7 +280,7 @@ export default function EvaluateCoursePage() {
             </div>
           }
 
-          <p className="text-xs font-semibold text-blue-700 bg-blue-100 inline-block px-2 py-1 rounded-full">{course.code}</p>
+          <p className="text-xs font-semibold bg-[#B2C9AD]/50 text-[#4B5945] inline-block px-2 py-1 rounded-full">{course.code}</p>
           <h2 className="text-xl font-bold text-gray-900 mt-2">{course.name}</h2>
           <p className="text-sm text-gray-500 mt-1">
             Submitting as student ID <span className="font-mono text-gray-700">{studentProfileId}</span>
@@ -388,7 +389,7 @@ export default function EvaluateCoursePage() {
             <button
               type="submit"
               disabled={submitting}
-              className="w-full bg-blue-600 text-white py-3 rounded-lg font-medium hover:bg-blue-700 disabled:opacity-50"
+              className="w-full bg-[#4B5945] text-white py-3 rounded-lg font-medium hover:bg-[#66785F] disabled:opacity-50"
             >
               {reviewId? (submitting ? "Updating…" : "Update evaluation"): (submitting ? "Submitting…" : "Submit evaluation")}
             </button>

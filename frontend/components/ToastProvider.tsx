@@ -1,6 +1,7 @@
 "use client";
 
 import { createContext, useContext, useState } from "react";
+import { X } from "@phosphor-icons/react";
 
 type ToastVariant = "success" | "error" | "info";
 
@@ -53,9 +54,10 @@ export function ToastProvider({ children }: { children: React.ReactNode }) {
               <span>{toast.message}</span>
               <button
                 onClick={() => removeToast(toast.id)}
-                className="text-lg leading-none opacity-70 hover:opacity-100"
+                className="opacity-70 hover:opacity-100"
+                aria-label="Dismiss"
               >
-                ×
+                <X size={16} weight="bold" />
               </button>
             </div>
           </div>

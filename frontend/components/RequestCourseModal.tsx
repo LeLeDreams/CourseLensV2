@@ -5,6 +5,7 @@ import { useEffect, useState } from "react";
 import type { User } from "@supabase/supabase-js";
 import { supabase } from "@/lib/supabase/client";
 import { useToast } from "@/components/ToastProvider";
+import { X } from "@phosphor-icons/react";
 
 type RequestCourseModalProps = {
   open: boolean;
@@ -130,7 +131,7 @@ export default function RequestCourseModal({ open, onClose }: RequestCourseModal
         aria-label="Close dialog"
         onClick={onClose}
       />
-      <div className="relative z-10 w-full max-w-lg rounded-xl border border-gray-200 bg-white p-6 shadow-xl max-h-[90vh] overflow-y-auto">
+      <div className="relative z-10 w-full max-w-lg rounded-xl border border-[#B2C9AD] bg-white p-6 shadow-xl max-h-[90vh] overflow-y-auto">
         <div className="flex items-start justify-between gap-3 mb-4">
           <div>
             <h3 className="text-lg font-semibold text-gray-900">Request a class</h3>
@@ -146,7 +147,7 @@ export default function RequestCourseModal({ open, onClose }: RequestCourseModal
             onClick={onClose}
             className="shrink-0 rounded-lg px-2 py-1 text-sm text-gray-500 hover:bg-gray-100"
           >
-            ✕
+            <X size={16} weight="bold" />
           </button>
         </div>
 
@@ -159,7 +160,7 @@ export default function RequestCourseModal({ open, onClose }: RequestCourseModal
             <p className="text-sm text-gray-700 mb-3">Sign in to request a new class listing.</p>
             <Link
               href={redirectLogin}
-              className="inline-block rounded-lg bg-blue-600 px-4 py-2 text-sm font-medium text-white hover:bg-blue-700"
+              className="inline-block rounded-lg bg-[#4B5945] px-4 py-2 text-sm font-medium text-white hover:bg-[#66785F]"
             >
               Sign in
             </Link>
@@ -250,7 +251,7 @@ export default function RequestCourseModal({ open, onClose }: RequestCourseModal
               <button
                 type="submit"
                 disabled={submitting}
-                className="flex-1 rounded-lg bg-blue-600 py-2 text-sm font-medium text-white hover:bg-blue-700 disabled:opacity-50"
+                className="flex-1 rounded-lg bg-[#4B5945] py-2 text-sm font-medium text-white hover:bg-[#66785F] disabled:opacity-50"
               >
                 {submitting ? "Submitting…" : "Submit request"}
               </button>

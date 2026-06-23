@@ -11,7 +11,7 @@ import { useToast } from "@/components/ToastProvider";
 
 import { cachedFetch, COURSE_TTL, getCached, REVIEWS_TTL } from "@/lib/course-cache";
 import type { Course, Reply, Review } from "../../../types/course";
-import type { AiSummary } from "../../api/ai-overview/route";
+import { ArrowDown, ArrowLeft, ArrowUp, CheckCircle, XCircle } from "@phosphor-icons/react";
 
 function normalizeGrade(grade: string | null): string | null {
   if (!grade) return null;
@@ -73,9 +73,6 @@ export default function CourseDetailPage() {
   const [alreadyReviewed, setAlreadyReviewed] = useState(false);
   const [showPopup, setShowPopup] = useState(false);
   const [selectedGraph, setSelectedGraph] = useState("distribution");
-  const [aiSummary, setAiSummary] = useState<AiSummary | null>(null);
-  const [aiLoading, setAiLoading] = useState(false);
-  const [aiTooFew, setAiTooFew] = useState(false);
   const [profs, setProfs] = useState("")
   const { showToast } = useToast();
 
@@ -116,12 +113,6 @@ export default function CourseDetailPage() {
 
       if (reviewData) {
         setReviews(reviewData);
-        const commentCount = reviewData.filter((r: Review) => r.comment).length;
-        if (commentCount >= 5) {
-          const buckets: Record<string, number> = { A: 0, "A-": 0, "B+": 0, B: 0, "B-": 0, "C+": 0, C: 0, "C-": 0, "D+": 0, D: 0, F: 0 };
-          reviewData.forEach((r: Review) => { const g = r.grade?.toUpperCase(); if (g && buckets[g] !== undefined) buckets[g]++; });
-          fetchAiOverview(reviewData[0]?.created_at, false, buckets);
-        }
         if (reviewData.length > 0) {
           const reviewIds = reviewData.map((r: Review) => r.id);
           const { data: replyData } = await supabase
@@ -157,44 +148,6 @@ export default function CourseDetailPage() {
     }
     fetchData();
   }, [id]);
-
-  async function fetchAiOverview(latestTimestamp?: string, bust = false, gradeDist?: Record<string, number>) {
-    const cacheKey = `ai-summary-${id}-${latestTimestamp ?? "unknown"}`;
-
-    if (!bust && latestTimestamp) {
-      const cached = localStorage.getItem(cacheKey);
-      if (cached) {
-        try {
-          setAiSummary(JSON.parse(cached));
-          return;
-        } catch {}
-      }
-    }
-
-    setAiLoading(true);
-    setAiTooFew(false);
-    showToast("Generating summary...", "info");
-
-    try {
-      const params = new URLSearchParams({ courseId: String(id) });
-      if (gradeDist) params.set("gradeDistribution", JSON.stringify(gradeDist));
-      const res = await fetch(`/api/ai-overview?${params}`);
-      const json = await res.json();
-      if (json.error) console.error("AI overview error:", json.error);
-      if (json.tooFewReviews) {
-        setAiTooFew(true);
-      } else if (json.summary) {
-        json.summary.generated_at = new Date().toISOString();
-        setAiSummary(json.summary);
-        showToast("Summary ready.", "success");
-        if (latestTimestamp) localStorage.setItem(cacheKey, JSON.stringify(json.summary));
-      }
-    } catch (err) {
-      console.error("fetchAiOverview failed:", err);
-      showToast("Could not generate summary.", "error");
-    }
-    setAiLoading(false);
-  }
 
   async function handleReplySubmit(reviewId: number, content: string, parentReplyId?: number) {
     if (!currentProfileId) return;
@@ -380,23 +333,17 @@ export default function CourseDetailPage() {
     return 0;
   });
 
-  function buttonText(sort: string) {
-    let ratingButton;
-    let semButton;
-    if (sort === 'rating-asc' || sort === 'rating-desc'){
-      sort === 'rating-asc' ? ratingButton = 'Rating ↑' : ratingButton = 'Rating ↓'
-      return ratingButton;
-    }
-    if (sort === 'sem-asc' || sort === 'sem-desc'){
-      sort === 'sem-asc' ? semButton = 'Semester ↑' : semButton = 'Semester ↓'
-      return semButton;
-    }
-    return
+  function buttonText(sort: string): React.ReactNode {
+    if (sort === 'rating-asc') return <span className="flex items-center gap-1">Rating <ArrowUp size={12} weight="bold" /></span>;
+    if (sort === 'rating-desc') return <span className="flex items-center gap-1">Rating <ArrowDown size={12} weight="bold" /></span>;
+    if (sort === 'sem-asc') return <span className="flex items-center gap-1">Semester <ArrowUp size={12} weight="bold" /></span>;
+    if (sort === 'sem-desc') return <span className="flex items-center gap-1">Semester <ArrowDown size={12} weight="bold" /></span>;
+    return null;
   }
 
   if (loading) {
     return (
-      <div className="flex min-h-[50vh] flex-1 items-center justify-center bg-gray-50">
+      <div className="flex min-h-[50vh] flex-1 items-center justify-center bg-background">
         <p className="text-gray-500">Loading...</p>
       </div>
     );
@@ -404,30 +351,30 @@ export default function CourseDetailPage() {
 
   if (!course) {
     return (
-      <div className="flex min-h-[50vh] flex-1 items-center justify-center bg-gray-50">
+      <div className="flex min-h-[50vh] flex-1 items-center justify-center bg-background">
         <p className="text-gray-500">Course not found.</p>
       </div>
     );
   }
 
   return (
-    <div className="min-h-full flex-1 bg-gray-50">
+    <div className="min-h-full flex-1 bg-background">
       <main className="mx-auto max-w-4xl px-4 py-8">
-        <Link href="/courses" className="text-sm text-blue-600 hover:underline mb-6 inline-block">
-          ← Back to courses
+        <Link href="/courses" className="mb-6 inline-flex items-center gap-1.5 text-sm text-[#4B5945] hover:text-[#66785F] transition-colors">
+          <ArrowLeft size={14} weight="bold" /> Back to courses
         </Link>
 
         <div className="bg-white border border-gray-200 rounded-xl p-6">
           <div className="flex justify-between items-start gap-4 mb-4">
             <div className="min-w-0 flex-1">
-              <span className="text-xs font-semibold bg-blue-100 text-blue-700 px-2 py-1 rounded-full">
+              <span className="text-xs font-semibold bg-[#B2C9AD]/50 text-[#4B5945] px-2 py-1 rounded-full">
                 {course.code}
               </span>
               <h2 className="text-2xl font-bold text-gray-900 mt-2">{course.name}</h2>
               <p className="text-gray-500">
                 <Link
                   href={`/professors/${encodeURIComponent(course.professor)}`}
-                  className="text-blue-600 hover:underline"
+                  className="text-[#4B5945] hover:text-[#66785F] hover:underline"
                 >
                   {course.professor}
                 </Link>
@@ -438,7 +385,7 @@ export default function CourseDetailPage() {
             <div className="flex shrink-0 items-start gap-3">
               <BookmarkButton courseId={course.id} />
               <div className="text-right">
-                <div className="text-4xl font-bold text-blue-600">{(course.rating ?? 0.0).toFixed(1)}</div>
+                <div className="text-4xl font-bold text-[#4B5945]">{(course.rating ?? 0.0).toFixed(1)}</div>
                 <div className="text-xs text-gray-400">/ 5.0 rating</div>
               </div>
             </div>
@@ -449,11 +396,11 @@ export default function CourseDetailPage() {
           <div className="mb-6 relative">
             <button
               onClick={() => window.location.href = `/courses/${course.id}/evaluate`}
-              className="inline-flex items-center justify-center rounded-lg bg-blue-600 px-4 py-2.5 text-sm font-medium text-white hover:bg-blue-700"
+              className="inline-flex items-center justify-center rounded-lg bg-[#4B5945] px-4 py-2.5 text-sm font-medium text-white hover:bg-[#66785F]"
             >
               {alreadyReviewed? "Edit Review": "Write a review"}
             </button>
-            <p className="text-blue-600 text-xs mt-2 mb-6">{alreadyReviewed? "You have already reviewed this course. You can update it at any time": ""}</p>
+            <p className="text-[#4B5945] text-xs mt-2 mb-6">{alreadyReviewed? "You have already reviewed this course. You can update it at any time": ""}</p>
           </div>
           
           <div className="grid grid-cols-4 gap-4 text-center">
@@ -512,7 +459,7 @@ export default function CourseDetailPage() {
                         y={y}
                         width={barWidth}
                         height={barHeight}
-                        fill="#2563eb"
+                        fill="#66785F"
                         rx="4"
                       />
                       <text
@@ -586,7 +533,7 @@ export default function CourseDetailPage() {
 
                 <polyline
                   fill="none"
-                  stroke="#3b82f6"
+                  stroke="#91AC8F"
                   strokeWidth="3"
                   points={gradeOverTime
                     .map((item, i) => {
@@ -601,7 +548,7 @@ export default function CourseDetailPage() {
                   const x = 70 + i * (450 / Math.max(gradeOverTime.length - 1, 1));
                   const y = 180 - (item.value / 4) * 160;
 
-                  return <circle key={i} cx={x} cy={y} r="4" fill="#2563eb" />;
+                  return <circle key={i} cx={x} cy={y} r="4" fill="#4B5945" />;
                 })}
 
                 {gradeOverTime.map((item, i) => {
@@ -745,7 +692,7 @@ export default function CourseDetailPage() {
                           y={y}
                           width={barWidth}
                           height={barHeight}
-                          fill="#10b981"
+                          fill="#91AC8F"
                           rx="4"
                         />
                         <text
@@ -865,116 +812,6 @@ export default function CourseDetailPage() {
           )}
         </div>
 
-        {/* AI Overview */}
-        <div className="mt-6 bg-white border border-blue-100 rounded-xl p-5">
-          <div className="flex items-center justify-between mb-3">
-            <div className="flex items-center gap-2">
-              <span className="text-sm font-semibold text-gray-800">✦ AI Overview</span>
-              <span className="text-xs bg-blue-100 text-blue-700 px-2 py-0.5 rounded-full">AI</span>
-            </div>
-            {!aiSummary && !aiLoading && !aiTooFew && (
-              <button
-                onClick={() => fetchAiOverview(reviews[0]?.created_at, false, gradeDistribution)}
-                className="text-xs bg-blue-600 text-white px-3 py-1.5 rounded-lg hover:bg-blue-700"
-              >
-                Generate
-              </button>
-            )}
-            {aiSummary && !aiLoading && (
-              <button
-                onClick={() => fetchAiOverview(reviews[0]?.created_at, true, gradeDistribution)}
-                className="text-xs text-gray-400 hover:text-gray-600 px-2 py-1 rounded-lg"
-              >
-                Regenerate
-              </button>
-            )}
-          </div>
-
-          {aiLoading && <p className="text-sm text-gray-400">Summarizing reviews...</p>}
-
-          {aiTooFew && !aiLoading && (
-            <p className="text-sm text-gray-400">Not enough written reviews to generate a summary yet.</p>
-          )}
-
-          {!aiSummary && !aiLoading && !aiTooFew && (
-            <p className="text-sm text-gray-400">Click Generate to get an AI summary of all reviews.</p>
-          )}
-
-          {aiSummary && !aiLoading && (
-            <div className="flex flex-col gap-4">
-              {/* Evidence bar */}
-              <div className="flex flex-wrap items-center gap-3 text-xs text-gray-500">
-                <span>Based on {aiSummary.total_reviews} reviews ({aiSummary.with_comments} with comments)</span>
-                <span className={`px-2 py-0.5 rounded-full font-medium ${
-                  aiSummary.confidence === "High" ? "bg-green-100 text-green-700" :
-                  aiSummary.confidence === "Medium" ? "bg-yellow-100 text-yellow-700" :
-                  "bg-red-100 text-red-600"
-                }`}>
-                  {aiSummary.confidence} confidence
-                </span>
-                {aiSummary.generated_at && (
-                  <span className="text-gray-400">
-                    Last updated {new Date(aiSummary.generated_at).toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" })}
-                  </span>
-                )}
-              </div>
-
-              {/* Overall sentiment */}
-              {aiSummary.overall_sentiment && (
-                <p className="text-sm text-gray-700 leading-relaxed">{aiSummary.overall_sentiment}</p>
-              )}
-
-              {/* Pros / Cons */}
-              <div className="grid grid-cols-2 gap-3">
-                {aiSummary.praises?.length > 0 && (
-                  <div className="bg-green-50 rounded-lg p-3">
-                    <p className="text-xs font-semibold text-green-700 mb-2">What students praise</p>
-                    <ul className="flex flex-col gap-1">
-                      {aiSummary.praises.map((p, i) => (
-                        <li key={i} className="text-xs text-gray-700 flex gap-1.5">
-                          <span className="text-green-500 mt-px">✓</span>{p}
-                        </li>
-                      ))}
-                    </ul>
-                  </div>
-                )}
-                {aiSummary.complaints?.length > 0 && (
-                  <div className="bg-red-50 rounded-lg p-3">
-                    <p className="text-xs font-semibold text-red-700 mb-2">Common complaints</p>
-                    <ul className="flex flex-col gap-1">
-                      {aiSummary.complaints.map((c, i) => (
-                        <li key={i} className="text-xs text-gray-700 flex gap-1.5">
-                          <span className="text-red-400 mt-px">✗</span>{c}
-                        </li>
-                      ))}
-                    </ul>
-                  </div>
-                )}
-              </div>
-
-              {/* Workload */}
-              {aiSummary.workload_summary && (
-                <div className="bg-gray-50 rounded-lg p-3">
-                  <p className="text-xs font-semibold text-gray-600 mb-1">Workload snapshot</p>
-                  <p className="text-xs text-gray-700">{aiSummary.workload_summary}</p>
-                </div>
-              )}
-
-              {/* Fit */}
-              {(aiSummary.good_fit || aiSummary.poor_fit) && (
-                <div className="border-t border-gray-100 pt-3 flex flex-col gap-1">
-                  {aiSummary.good_fit && (
-                    <p className="text-xs text-gray-600"><span className="font-semibold text-gray-700">Good fit:</span> {aiSummary.good_fit}</p>
-                  )}
-                  {aiSummary.poor_fit && (
-                    <p className="text-xs text-gray-600"><span className="font-semibold text-gray-700">May struggle:</span> {aiSummary.poor_fit}</p>
-                  )}
-                </div>
-              )}
-            </div>
-          )}
-        </div>
-
         {/* Reviews section */}
         <div className="mt-8">
           <h3 className="text-lg font-semibold text-gray-800 mb-4">
@@ -991,7 +828,7 @@ export default function CourseDetailPage() {
               }}
               className={`px-3 py-1.5 text-sm font-medium border rounded transition-colors ${
                 (sortBy === "rating-asc" || sortBy === "rating-desc")
-                  ? "bg-blue-600 text-white border-blue-600 hover:border-blue-400"
+                  ? "bg-[#4B5945] text-white border-[#4B5945] hover:bg-[#66785F]"
                   : "bg-white text-gray-700 border-gray-300 hover:border-gray-400"
               }`}
             >
@@ -1004,7 +841,7 @@ export default function CourseDetailPage() {
               }}
               className={`px-3 py-1.5 text-sm font-medium border rounded transition-colors ${
                 (sortBy === "sem-asc" || sortBy === "sem-desc")
-                  ? "bg-blue-600 text-white border-blue-600 hover:border-blue-400"
+                  ? "bg-[#4B5945] text-white border-[#4B5945] hover:bg-[#66785F]"
                   : "bg-white text-gray-700 border-gray-300 hover:border-gray-400"
               }`}
             >
@@ -1100,7 +937,7 @@ function ReplyItem({
   return (
     <div className={depth > 0 ? "ml-5 border-l border-gray-100 pl-3" : ""}>
       <div className="flex gap-2 items-start">
-        <span className={`shrink-0 text-xs font-bold px-1.5 py-0.5 rounded ${isOP ? "bg-blue-100 text-blue-700" : "bg-gray-100 text-gray-600"}`}>
+        <span className={`shrink-0 text-xs font-bold px-1.5 py-0.5 rounded ${isOP ? "bg-[#B2C9AD]/50 text-[#4B5945]" : "bg-gray-100 text-gray-600"}`}>
           {label}
         </span>
         <div className="flex-1">
@@ -1108,7 +945,7 @@ function ReplyItem({
           {currentProfileId && (
             <button
               onClick={() => setReplyingTo(isReplying ? null : node.id)}
-              className="text-xs text-blue-700 hover:underline mt-1"
+              className="text-xs text-[#4B5945] hover:text-[#66785F] hover:underline mt-1"
             >
               {isReplying ? "Cancel" : "Reply"}
             </button>
@@ -1120,12 +957,12 @@ function ReplyItem({
                 onChange={(e) => setReplyText(e.target.value)}
                 placeholder="Write a reply..."
                 rows={2}
-                className="flex-1 text-sm text-gray-900 border border-gray-200 rounded-lg px-3 py-2 resize-none focus:outline-none focus:ring-1 focus:ring-blue-400 placeholder-gray-500"
+                className="flex-1 text-sm text-gray-900 border border-gray-200 rounded-lg px-3 py-2 resize-none focus:outline-none focus:ring-1 focus:ring-[#91AC8F] placeholder-gray-500"
               />
               <button
                 onClick={() => onSubmit(node.id)}
                 disabled={submitting || !replyText.trim()}
-                className="text-sm bg-blue-600 text-white px-3 py-2 rounded-lg hover:bg-blue-700 disabled:opacity-50"
+                className="text-sm bg-[#4B5945] text-white px-3 py-2 rounded-lg hover:bg-[#66785F] disabled:opacity-50"
               >
                 Reply
               </button>
@@ -1190,7 +1027,7 @@ function ReviewCard({
       )}
 
       <div className="flex flex-wrap gap-3 mb-3 text-sm">
-        <span className="bg-blue-50 text-blue-700 px-2 py-1 rounded-md">
+        <span className="bg-[#B2C9AD]/30 text-[#4B5945] px-2 py-1 rounded-md">
           Rating: {review.rating.toFixed(1)} / 5
         </span>
         <span className="bg-orange-50 text-orange-700 px-2 py-1 rounded-md">
@@ -1223,7 +1060,7 @@ function ReviewCard({
       <div className="mt-4 flex items-center gap-3">
         <button
           onClick={() => setShowReplies((v) => !v)}
-          className="text-xs font-medium text-blue-700 hover:underline"
+          className="text-xs font-medium text-[#4B5945] hover:text-[#66785F] hover:underline"
         >
           {showReplies ? "Hide replies" : "View replies"} · {replies.length}
         </button>
@@ -1245,12 +1082,12 @@ function ReviewCard({
             onChange={(e) => setReplyText(e.target.value)}
             placeholder="Write a reply..."
             rows={2}
-            className="flex-1 text-sm text-gray-900 border border-gray-200 rounded-lg px-3 py-2 resize-none focus:outline-none focus:ring-1 focus:ring-blue-400 placeholder-gray-500"
+            className="flex-1 text-sm text-gray-900 border border-gray-200 rounded-lg px-3 py-2 resize-none focus:outline-none focus:ring-1 focus:ring-[#91AC8F] placeholder-gray-500"
           />
           <button
             onClick={() => handleSubmit(undefined)}
             disabled={submitting || !replyText.trim()}
-            className="text-sm bg-blue-600 text-white px-3 py-2 rounded-lg hover:bg-blue-700 disabled:opacity-50"
+            className="text-sm bg-[#4B5945] text-white px-3 py-2 rounded-lg hover:bg-[#66785F] disabled:opacity-50"
           >
             Reply
           </button>

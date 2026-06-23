@@ -7,6 +7,7 @@ import { supabase } from "@/lib/supabase/client";
 import { gpaToLetter } from "@/lib/gpa";
 import { formatCredits } from "@/lib/courseFormat";
 import type { Course } from "@/types/course";
+import { ArrowLeft, X } from "@phosphor-icons/react";
 
 const MAX_COMPARE = 4;
 
@@ -521,7 +522,7 @@ export default function CourseCompareView({ initialSelectedIds }: CourseCompareV
 
   if (loading) {
     return (
-      <div className="flex min-h-[50vh] flex-1 items-center justify-center bg-gray-50">
+      <div className="flex min-h-[50vh] flex-1 items-center justify-center bg-background">
         <p className="text-gray-500">Loading comparison…</p>
       </div>
     );
@@ -529,10 +530,10 @@ export default function CourseCompareView({ initialSelectedIds }: CourseCompareV
 
   if (selectedIds.length < 2) {
     return (
-      <div className="min-h-full flex-1 bg-gray-50">
+      <div className="min-h-full flex-1 bg-background">
         <main className="mx-auto max-w-2xl px-4 py-12">
-          <Link href="/courses" className="mb-6 inline-block text-sm text-blue-600 hover:underline">
-            ← Back to courses
+          <Link href="/courses" className="mb-6 inline-flex items-center gap-1.5 text-sm text-[#4B5945] hover:text-[#66785F] transition-colors">
+            <ArrowLeft size={14} weight="bold" /> Back to courses
           </Link>
           <div className="rounded-2xl border border-gray-200 bg-white p-8 shadow-sm">
             <h1 className="text-xl font-bold text-gray-900">Compare courses</h1>
@@ -553,10 +554,10 @@ export default function CourseCompareView({ initialSelectedIds }: CourseCompareV
 
   if (courses.length < 2) {
     return (
-      <div className="min-h-full flex-1 bg-gray-50">
+      <div className="min-h-full flex-1 bg-background">
         <main className="mx-auto max-w-2xl px-4 py-12">
-          <Link href="/courses" className="mb-6 inline-block text-sm text-blue-600 hover:underline">
-            ← Back to courses
+          <Link href="/courses" className="mb-6 inline-flex items-center gap-1.5 text-sm text-[#4B5945] hover:text-[#66785F] transition-colors">
+            <ArrowLeft size={14} weight="bold" /> Back to courses
           </Link>
           <div className="rounded-2xl border border-amber-200 bg-amber-50/60 p-8 shadow-sm">
             <h1 className="text-xl font-bold text-gray-900">Could not load comparison</h1>
@@ -576,10 +577,10 @@ export default function CourseCompareView({ initialSelectedIds }: CourseCompareV
   }
 
   return (
-    <div className="min-h-full flex-1 bg-gray-50 pb-10">
+    <div className="min-h-full flex-1 bg-background pb-10">
       <main className="mx-auto max-w-5xl px-4 py-8">
-        <Link href="/courses" className="mb-6 inline-block text-sm text-blue-600 hover:underline">
-          ← Back to courses
+        <Link href="/courses" className="mb-6 inline-flex items-center gap-1.5 text-sm text-[#4B5945] hover:text-[#66785F] transition-colors">
+          <ArrowLeft size={14} weight="bold" /> Back to courses
         </Link>
 
         <section aria-label="Course comparison">
@@ -616,10 +617,10 @@ export default function CourseCompareView({ initialSelectedIds }: CourseCompareV
               <button
                 type="button"
                 onClick={() => setModal(null)}
-                className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-gray-100 text-xl leading-none text-gray-700 hover:bg-gray-200"
+                className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-gray-100 text-gray-700 hover:bg-gray-200"
                 aria-label="Close"
               >
-                ×
+                <X size={16} weight="bold" />
               </button>
             </div>
             <div className="rounded-2xl border border-emerald-100 bg-emerald-50/30 p-4">

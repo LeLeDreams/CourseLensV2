@@ -5,6 +5,7 @@ import Link from "next/link";
 import { useState, useEffect } from "react";
 import { supabase } from "../../../lib/supabase/client";
 import type { Course } from "../../../types/course";
+import { ArrowLeft } from "@phosphor-icons/react";
 
 export default function ProfessorDetailPage() {
   const { name } = useParams();
@@ -26,7 +27,7 @@ export default function ProfessorDetailPage() {
 
   if (loading) {
     return (
-      <div className="flex min-h-[50vh] flex-1 items-center justify-center bg-gray-50">
+      <div className="flex min-h-[50vh] flex-1 items-center justify-center bg-background">
         <p className="text-gray-500">Loading...</p>
       </div>
     );
@@ -34,7 +35,7 @@ export default function ProfessorDetailPage() {
 
   if (courses.length === 0) {
     return (
-      <div className="flex min-h-[50vh] flex-1 items-center justify-center bg-gray-50">
+      <div className="flex min-h-[50vh] flex-1 items-center justify-center bg-background">
         <p className="text-gray-500">Professor not found.</p>
       </div>
     );
@@ -46,10 +47,10 @@ export default function ProfessorDetailPage() {
   const department = courses[0].department;
 
   return (
-    <div className="min-h-full flex-1 bg-gray-50">
+    <div className="min-h-full flex-1 bg-background">
       <main className="mx-auto max-w-4xl px-4 py-8">
-        <Link href="/courses" className="text-sm text-blue-600 hover:underline mb-6 inline-block">
-          ← Back to courses
+        <Link href="/courses" className="mb-6 inline-flex items-center gap-1.5 text-sm text-[#4B5945] hover:text-[#66785F] transition-colors">
+          <ArrowLeft size={14} weight="bold" /> Back to courses
         </Link>
 
         <div className="bg-white border border-gray-200 rounded-xl p-6 mb-6">
@@ -59,15 +60,15 @@ export default function ProfessorDetailPage() {
           </div>
 
           <div className="grid grid-cols-3 gap-4 text-center">
-            <div className="bg-gray-50 rounded-lg p-4">
+            <div className="bg-background rounded-lg p-4">
               <div className="text-2xl font-bold text-blue-600">{avgRating.toFixed(1)}</div>
               <div className="text-sm text-gray-500">Avg Rating</div>
             </div>
-            <div className="bg-gray-50 rounded-lg p-4">
+            <div className="bg-background rounded-lg p-4">
               <div className="text-2xl font-bold text-gray-800">{avgDifficulty.toFixed(1)}</div>
               <div className="text-sm text-gray-500">Avg Difficulty</div>
             </div>
-            <div className="bg-gray-50 rounded-lg p-4">
+            <div className="bg-background rounded-lg p-4">
               <div className="text-2xl font-bold text-gray-800">{totalReviews}</div>
               <div className="text-sm text-gray-500">Total Reviews</div>
             </div>

@@ -38,7 +38,7 @@ export default function BookmarksPage() {
 
   if (!bookmarksLoading && !user) {
     return (
-      <div className="min-h-full flex-1 bg-gray-50">
+      <div className="min-h-full flex-1 bg-background">
         <main className="mx-auto max-w-4xl px-4 py-16 text-center">
           <p className="text-gray-700">Sign in to see saved courses.</p>
           <Link
@@ -53,7 +53,7 @@ export default function BookmarksPage() {
   }
 
   return (
-    <div className="min-h-full flex-1 bg-gray-50">
+    <div className="min-h-full flex-1 bg-background">
       <main className="mx-auto max-w-4xl px-4 py-8">
         <h2 className="mb-6 text-xl font-semibold text-gray-800">Saved courses</h2>
         {loading || bookmarksLoading ? (
