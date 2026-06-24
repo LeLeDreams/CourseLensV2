@@ -364,14 +364,14 @@ export default function CourseDetailPage() {
           <ArrowLeft size={14} weight="bold" /> Back to courses
         </Link>
 
-        <div className="bg-white border border-gray-200 rounded-xl p-6">
+        <div className="bg-white border border-gray-200 rounded-xl p-6 dark:border-[#374033] dark:bg-[#232A1F]">
           <div className="flex justify-between items-start gap-4 mb-4">
             <div className="min-w-0 flex-1">
               <span className="text-xs font-semibold bg-[#B2C9AD]/50 text-[#4B5945] px-2 py-1 rounded-full">
                 {course.code}
               </span>
-              <h2 className="text-2xl font-bold text-gray-900 mt-2">{course.name}</h2>
-              <p className="text-gray-500">
+              <h2 className="text-2xl font-bold text-gray-900 mt-2 dark:text-[#E8EFE6]">{course.name}</h2>
+              <p className="text-gray-500 dark:text-[#91AC8F]">
                 <Link
                   href={`/professors/${encodeURIComponent(course.professor)}`}
                   className="text-[#4B5945] hover:text-[#66785F] hover:underline"
@@ -386,12 +386,12 @@ export default function CourseDetailPage() {
               <BookmarkButton courseId={course.id} />
               <div className="text-right">
                 <div className="text-4xl font-bold text-[#4B5945]">{(course.rating ?? 0.0).toFixed(1)}</div>
-                <div className="text-xs text-gray-400">/ 5.0 rating</div>
+                <div className="text-xs text-gray-400 dark:text-[#66785F]">/ 5.0 rating</div>
               </div>
             </div>
           </div>
 
-          <p className="text-gray-700 mb-6">{course.description}</p>
+          <p className="text-gray-700 mb-6 dark:text-[#B2C9AD]">{course.description}</p>
 
           <div className="mb-6 relative">
             <button
@@ -404,32 +404,32 @@ export default function CourseDetailPage() {
           </div>
           
           <div className="grid grid-cols-4 gap-4 text-center">
-            <div className="bg-gray-50 rounded-lg p-4">
-              <div className="text-2xl font-bold text-gray-800">{(course.rating ?? 0.0).toFixed(1)}</div>
-              <div className="text-sm text-gray-500">Overall Rating</div>
+            <div className="bg-gray-50 rounded-lg p-4 dark:bg-[#1B2018]">
+              <div className="text-2xl font-bold text-gray-800 dark:text-[#E8EFE6]">{(course.rating ?? 0.0).toFixed(1)}</div>
+              <div className="text-sm text-gray-500 dark:text-[#91AC8F]">Overall Rating</div>
             </div>
-            <div className="bg-gray-50 rounded-lg p-4">
-              <div className="text-2xl font-bold text-gray-800">{(course.difficulty ?? 0.0).toFixed(1)}</div>
-              <div className="text-sm text-gray-500">Difficulty</div>
+            <div className="bg-gray-50 rounded-lg p-4 dark:bg-[#1B2018]">
+              <div className="text-2xl font-bold text-gray-800 dark:text-[#E8EFE6]">{(course.difficulty ?? 0.0).toFixed(1)}</div>
+              <div className="text-sm text-gray-500 dark:text-[#91AC8F]">Difficulty</div>
             </div>
-            <div className="bg-gray-50 rounded-lg p-4">
-              <div className="text-2xl font-bold text-gray-800">{gpaToLetter(course.avg_gpa)}</div>
-              <div className="text-sm text-gray-500">Avg. Grade</div>
+            <div className="bg-gray-50 rounded-lg p-4 dark:bg-[#1B2018]">
+              <div className="text-2xl font-bold text-gray-800 dark:text-[#E8EFE6]">{gpaToLetter(course.avg_gpa)}</div>
+              <div className="text-sm text-gray-500 dark:text-[#91AC8F]">Avg. Grade</div>
             </div>
-            <div className="bg-gray-50 rounded-lg p-4">
-              <div className="text-2xl font-bold text-gray-800">{formatCredits(course.credits, course.max_credits)}</div>
-              <div className="text-sm text-gray-500">Credits</div>
+            <div className="bg-gray-50 rounded-lg p-4 dark:bg-[#1B2018]">
+              <div className="text-2xl font-bold text-gray-800 dark:text-[#E8EFE6]">{formatCredits(course.credits, course.max_credits)}</div>
+              <div className="text-sm text-gray-500 dark:text-[#91AC8F]">Credits</div>
             </div>
           </div>
         </div>
-        <div className="mt-10 bg-white border border-gray-200 rounded-xl p-6">
+        <div className="mt-10 bg-white border border-gray-200 rounded-xl p-6 dark:border-[#374033] dark:bg-[#232A1F]">
           <div className="flex justify-between items-center mb-6">
-            <h3 className="text-lg font-semibold text-gray-800">Course Analytics</h3>
+            <h3 className="text-lg font-semibold text-gray-800 dark:text-[#E8EFE6]">Course Analytics</h3>
 
             <select
               value={selectedGraph}
               onChange={(e) => setSelectedGraph(e.target.value)}
-              className="border border-gray-300 rounded-lg px-3 py-2 text-sm text-gray-900"
+              className="border border-gray-300 rounded-lg px-3 py-2 text-sm text-gray-900 dark:border-[#374033] dark:bg-[#1B2018] dark:text-[#E8EFE6]"
             >
               <option value="distribution">Grade Distribution</option>
               <option value="over-time">Grade Over Time</option>
@@ -619,7 +619,7 @@ export default function CourseDetailPage() {
                         y={y}
                         width={barWidth}
                         height={barHeight}
-                        fill="#2563eb"
+                        fill="#66785F"
                         rx="4"
                       />
 
@@ -814,13 +814,13 @@ export default function CourseDetailPage() {
 
         {/* Reviews section */}
         <div className="mt-8">
-          <h3 className="text-lg font-semibold text-gray-800 mb-4">
+          <h3 className="text-lg font-semibold text-gray-800 mb-4 dark:text-[#E8EFE6]">
             {reviews.length} Review{reviews.length !== 1 ? "s" : ""}
           </h3>
 
           {/*Sorting*/}
           <div className="flex items-center gap-2 mb-4">
-            <span className="text-sm text-gray-500 font-medium">Sort:</span>
+            <span className="text-sm text-gray-500 font-medium dark:text-[#91AC8F]">Sort:</span>
             <button
               onClick={() => {
                 setSortBy(sortBy === "rating-asc" ? "rating-desc" : "rating-asc");
@@ -829,7 +829,7 @@ export default function CourseDetailPage() {
               className={`px-3 py-1.5 text-sm font-medium border rounded transition-colors ${
                 (sortBy === "rating-asc" || sortBy === "rating-desc")
                   ? "bg-[#4B5945] text-white border-[#4B5945] hover:bg-[#66785F]"
-                  : "bg-white text-gray-700 border-gray-300 hover:border-gray-400"
+                  : "bg-white text-gray-700 border-gray-300 hover:border-gray-400 dark:bg-[#232A1F] dark:text-[#B2C9AD] dark:border-[#374033] dark:hover:border-[#4B5945]"
               }`}
             >
               {sortBy === "rating-asc" || sortBy === "rating-desc"? buttonText(sortBy): 'Rating'}
@@ -842,13 +842,13 @@ export default function CourseDetailPage() {
               className={`px-3 py-1.5 text-sm font-medium border rounded transition-colors ${
                 (sortBy === "sem-asc" || sortBy === "sem-desc")
                   ? "bg-[#4B5945] text-white border-[#4B5945] hover:bg-[#66785F]"
-                  : "bg-white text-gray-700 border-gray-300 hover:border-gray-400"
+                  : "bg-white text-gray-700 border-gray-300 hover:border-gray-400 dark:bg-[#232A1F] dark:text-[#B2C9AD] dark:border-[#374033] dark:hover:border-[#4B5945]"
               }`}
             >
               {sortBy === "sem-asc" || sortBy === "sem-desc"? buttonText(sortBy): 'Semester'}
             </button>
-            <div className="px-3 py-1.5 text-sm font-medium border rounded bg-white text-gray-700 border-gray-300 hover:border-gray-400">
-              <select onChange={(e) => setProfs(e.target.value)}>
+            <div className="px-3 py-1.5 text-sm font-medium border rounded bg-white text-gray-700 border-gray-300 hover:border-gray-400 dark:bg-[#232A1F] dark:text-[#B2C9AD] dark:border-[#374033]">
+              <select onChange={(e) => setProfs(e.target.value)} className="bg-white dark:bg-[#232A1F] dark:text-[#B2C9AD]">
                 <option value="">All Professors</option>
                 {professorOptions.map((prof) => (
                   <option key={prof} value={prof}>{prof}</option>
@@ -858,7 +858,7 @@ export default function CourseDetailPage() {
           </div>
 
           {reviews.length === 0 ? (
-            <p className="text-gray-400 text-sm">No reviews yet. Be the first!</p>
+            <p className="text-gray-400 text-sm dark:text-[#66785F]">No reviews yet. Be the first!</p>
           ) : (
             <div className="flex flex-col gap-4">
               {sortedReviews.map((r) => (
@@ -935,13 +935,13 @@ function ReplyItem({
   const isOP = label === "OP";
   const isReplying = replyingTo === node.id;
   return (
-    <div className={depth > 0 ? "ml-5 border-l border-gray-100 pl-3" : ""}>
+    <div className={depth > 0 ? "ml-5 border-l border-gray-100 pl-3 dark:border-[#374033]" : ""}>
       <div className="flex gap-2 items-start">
-        <span className={`shrink-0 text-xs font-bold px-1.5 py-0.5 rounded ${isOP ? "bg-[#B2C9AD]/50 text-[#4B5945]" : "bg-gray-100 text-gray-600"}`}>
+        <span className={`shrink-0 text-xs font-bold px-1.5 py-0.5 rounded ${isOP ? "bg-[#B2C9AD]/50 text-[#4B5945] dark:bg-[#4B5945]/50 dark:text-[#B2C9AD]" : "bg-gray-100 text-gray-600 dark:bg-[#374033] dark:text-[#91AC8F]"}`}>
           {label}
         </span>
         <div className="flex-1">
-          <p className="text-sm text-gray-700">{node.content}</p>
+          <p className="text-sm text-gray-700 dark:text-[#B2C9AD]">{node.content}</p>
           {currentProfileId && (
             <button
               onClick={() => setReplyingTo(isReplying ? null : node.id)}
@@ -957,7 +957,7 @@ function ReplyItem({
                 onChange={(e) => setReplyText(e.target.value)}
                 placeholder="Write a reply..."
                 rows={2}
-                className="flex-1 text-sm text-gray-900 border border-gray-200 rounded-lg px-3 py-2 resize-none focus:outline-none focus:ring-1 focus:ring-[#91AC8F] placeholder-gray-500"
+                className="flex-1 text-sm text-gray-900 border border-gray-200 rounded-lg px-3 py-2 resize-none focus:outline-none focus:ring-1 focus:ring-[#91AC8F] placeholder-gray-500 dark:bg-[#1B2018] dark:border-[#374033] dark:text-[#E8EFE6] dark:placeholder-[#66785F]"
               />
               <button
                 onClick={() => onSubmit(node.id)}
@@ -1019,39 +1019,39 @@ function ReviewCard({
 
 
   return (
-    <div className="bg-white border border-gray-200 rounded-xl p-5">
+    <div className="bg-white border border-gray-200 rounded-xl p-5 dark:border-[#374033] dark:bg-[#232A1F]">
       {review.semester && (
         <div className="flex justify-end mb-3">
-          <span className="text-xs text-gray-400">{review.semester}</span>
+          <span className="text-xs text-gray-400 dark:text-[#66785F]">{review.semester}</span>
         </div>
       )}
 
       <div className="flex flex-wrap gap-3 mb-3 text-sm">
-        <span className="bg-[#B2C9AD]/30 text-[#4B5945] px-2 py-1 rounded-md">
+        <span className="bg-[#B2C9AD]/30 text-[#4B5945] px-2 py-1 rounded-md dark:bg-[#4B5945]/30 dark:text-[#B2C9AD]">
           Rating: {review.rating.toFixed(1)} / 5
         </span>
-        <span className="bg-orange-50 text-orange-700 px-2 py-1 rounded-md">
+        <span className="bg-orange-50 text-orange-700 px-2 py-1 rounded-md dark:bg-orange-900/30 dark:text-orange-300">
           Difficulty: {review.difficulty.toFixed(1)} / 5
         </span>
         {review.grade && (
-          <span className="bg-green-50 text-green-700 px-2 py-1 rounded-md">
+          <span className="bg-green-50 text-green-700 px-2 py-1 rounded-md dark:bg-green-900/30 dark:text-green-300">
             Grade: {review.grade}
           </span>
         )}
         {review.hours_per_week && (
-          <span className="bg-gray-100 text-gray-600 px-2 py-1 rounded-md">
+          <span className="bg-gray-100 text-gray-600 px-2 py-1 rounded-md dark:bg-[#1B2018] dark:text-[#91AC8F]">
             {review.hours_per_week} hrs/week
           </span>
         )}
         {review.professor_name && (
-          <span className="bg-gray-100 text-gray-600 px-2 py-1 rounded-md">
+          <span className="bg-gray-100 text-gray-600 px-2 py-1 rounded-md dark:bg-[#1B2018] dark:text-[#91AC8F]">
             {review.professor_name}
           </span>
         )}
       </div>
 
       {review.comment && (
-        <p className="text-sm text-gray-600 border-l-2 border-gray-200 pl-3 italic">
+        <p className="text-sm text-gray-600 border-l-2 border-gray-200 pl-3 italic dark:text-[#B2C9AD] dark:border-[#374033]">
           "{review.comment}"
         </p>
       )}
@@ -1067,7 +1067,7 @@ function ReviewCard({
         {currentProfileId && (
           <button
             onClick={() => { setShowTopReplyInput((v) => !v); setReplyingTo(null); }}
-            className="text-xs font-medium text-gray-500 hover:text-gray-700 hover:underline"
+            className="text-xs font-medium text-gray-500 hover:text-gray-700 hover:underline dark:text-[#91AC8F] dark:hover:text-[#B2C9AD]"
           >
             Reply
           </button>
@@ -1098,7 +1098,7 @@ function ReviewCard({
       {showReplies && (
         <div className="mt-3 flex flex-col gap-3">
           {replies.length === 0 && (
-            <p className="text-xs text-gray-400">No replies yet.</p>
+            <p className="text-xs text-gray-400 dark:text-[#66785F]">No replies yet.</p>
           )}
           {buildTree(replies).map((node) => (
             <ReplyItem

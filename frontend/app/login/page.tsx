@@ -35,7 +35,7 @@ export default function Login() {
    return (<>
        <div className="flex min-h-0 flex-1 items-center justify-center bg-background">
            <div className="w-[360px]">
-           <div className="bg-white shadow-md rounded-xl border border-[#B2C9AD] p-[45px] text-center">
+           <div className="bg-white shadow-md rounded-xl border border-[#B2C9AD] p-[45px] text-center dark:border-[#374033] dark:bg-[#232A1F]">
 
 
            <form className="space-y-4" onSubmit={handleLogin}>
@@ -45,18 +45,18 @@ export default function Login() {
                    placeholder="Email"
                    value={email}
                    onChange={(e) => setEmail(e.target.value)}
-                   className="w-full rounded-lg border border-[#B2C9AD] bg-white p-[15px] text-sm outline-none text-[#474747] focus:border-[#91AC8F] transition-colors"
+                   className="w-full rounded-lg border border-[#B2C9AD] bg-white p-[15px] text-sm outline-none text-[#474747] focus:border-[#91AC8F] transition-colors dark:border-[#374033] dark:bg-[#1B2018] dark:text-[#E8EFE6] dark:placeholder-[#66785F]"
                />
                <input
                    type="password"
                    placeholder="Password"
                    value={password}
                    onChange={(p) => setPassword(p.target.value)}
-                   className="w-full rounded-lg border border-[#B2C9AD] bg-white p-[15px] text-sm outline-none text-[#474747] focus:border-[#91AC8F] transition-colors"
+                   className="w-full rounded-lg border border-[#B2C9AD] bg-white p-[15px] text-sm outline-none text-[#474747] focus:border-[#91AC8F] transition-colors dark:border-[#374033] dark:bg-[#1B2018] dark:text-[#E8EFE6] dark:placeholder-[#66785F]"
                />
                <button className="w-full bg-[#4B5945] text-white py-[15px] rounded-lg font-semibold hover:bg-[#66785F] transition">Sign In</button>
                {message && <p className="text-sm text-red-500">{message}</p>}
-               <p className="text-[#898989] text-xs mt-4">
+               <p className="text-[#898989] text-xs mt-4 dark:text-[#91AC8F]">
                    Not registered?{" "}
                    <Link href="/signup" className="text-[#4B5945] no-underline hover:text-[#66785F] transition">
                        Create an account

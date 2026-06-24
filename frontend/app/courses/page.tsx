@@ -403,12 +403,12 @@ function CoursesPageInner() {
     <div className="min-h-full flex-1 bg-background pb-32">
       <div className="mx-auto max-w-7xl px-4 py-8">
         <div className="mb-6 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-          <h2 className="text-xl font-semibold text-gray-800">Browse Courses</h2>
+          <h2 className="text-xl font-semibold text-gray-800 dark:text-[#E8EFE6]">Browse Courses</h2>
           <div className="flex flex-wrap items-center gap-2">
             <button
               type="button"
               onClick={() => setRequestModalOpen(true)}
-              className="shrink-0 rounded-lg border border-[#91AC8F] bg-white px-4 py-2 text-sm font-medium text-[#4B5945] shadow-sm hover:bg-[#B2C9AD]/20"
+              className="shrink-0 rounded-lg border border-[#91AC8F] bg-white px-4 py-2 text-sm font-medium text-[#4B5945] shadow-sm hover:bg-[#B2C9AD]/20 dark:border-[#66785F] dark:bg-[#1B2018] dark:text-[#B2C9AD] dark:hover:bg-[#374033]"
             >
               Request a class
             </button>
@@ -423,12 +423,12 @@ function CoursesPageInner() {
             placeholder="Search by name, code, or professor..."
             value={inputQ}
             onChange={handleSearchChange}
-            className="w-full rounded-lg border border-gray-300 px-4 py-2 text-sm text-gray-900 focus:outline-none focus:ring-2 focus:ring-[#91AC8F]"
+            className="w-full rounded-lg border border-gray-300 px-4 py-2 text-sm text-gray-900 focus:outline-none focus:ring-2 focus:ring-[#91AC8F] dark:border-[#374033] dark:bg-[#1B2018] dark:text-[#E8EFE6] dark:placeholder-[#66785F]"
           />
           <select
             value={college}
             onChange={(e) => handleCollegeChange(e.target.value)}
-            className="border border-gray-300 hover:border-gray-400 rounded-lg px-3 py-2 text-sm text-gray-900 focus:outline-none"
+            className="border border-gray-300 hover:border-gray-400 rounded-lg px-3 py-2 text-sm text-gray-900 focus:outline-none dark:border-[#374033] dark:bg-[#1B2018] dark:text-[#E8EFE6]"
           >
             <option value="">Select College</option>
             {collegeOptions.map((col) => (
@@ -438,7 +438,7 @@ function CoursesPageInner() {
           <select
             value={department}
             onChange={(e) => setDepartment(e.target.value)}
-            className="border border-gray-300 hover:border-gray-400 rounded-lg px-3 py-2 text-sm text-gray-900 focus:outline-none"
+            className="border border-gray-300 hover:border-gray-400 rounded-lg px-3 py-2 text-sm text-gray-900 focus:outline-none dark:border-[#374033] dark:bg-[#1B2018] dark:text-[#E8EFE6]"
           >
             <option value="">Select Department</option>
             {departmentOptions.map((dept) => (
@@ -461,11 +461,11 @@ function CoursesPageInner() {
                 <ListboxOptions
                   anchor="bottom"
                   transition
-                  className="z-10 origin-top rounded-lg border border-gray-200 bg-white p-1 shadow-lg transition duration-200 ease-out data-closed:scale-95 data-closed:opacity-0"
+                  className="z-10 origin-top rounded-lg border border-gray-200 bg-white p-1 shadow-lg transition duration-200 ease-out data-closed:scale-95 data-closed:opacity-0 dark:border-[#374033] dark:bg-[#232A1F]"
                 >
                   <ListboxOption
                     value=""
-                    className="cursor-pointer rounded px-3 py-2 text-sm text-gray-900 transition-colors data-focus:bg-[#B2C9AD]/40"
+                    className="cursor-pointer rounded px-3 py-2 text-sm text-gray-900 transition-colors data-focus:bg-[#B2C9AD]/40 dark:text-[#E8EFE6] dark:data-focus:bg-[#4B5945]/40"
                   >
                     All Colleges
                   </ListboxOption>
@@ -473,7 +473,7 @@ function CoursesPageInner() {
                     <ListboxOption
                       key={col}
                       value={col}
-                      className="cursor-pointer rounded px-3 py-2 text-sm text-gray-900 transition-colors data-focus:bg-[#B2C9AD]/40"
+                      className="cursor-pointer rounded px-3 py-2 text-sm text-gray-900 transition-colors data-focus:bg-[#B2C9AD]/40 dark:text-[#E8EFE6] dark:data-focus:bg-[#4B5945]/40"
                     >
                       {col}
                     </ListboxOption>
@@ -492,11 +492,11 @@ function CoursesPageInner() {
                 <ListboxOptions
                   anchor="bottom"
                   transition
-                  className="z-10 origin-top rounded-lg border border-gray-200 bg-white p-1 shadow-lg transition duration-200 ease-out data-closed:scale-95 data-closed:opacity-0"
+                  className="z-10 origin-top rounded-lg border border-gray-200 bg-white p-1 shadow-lg transition duration-200 ease-out data-closed:scale-95 data-closed:opacity-0 dark:border-[#374033] dark:bg-[#232A1F]"
                 >
                   <ListboxOption
                     value=""
-                    className="cursor-pointer rounded px-3 py-2 text-sm text-gray-900 transition-colors data-focus:bg-[#B2C9AD]/40"
+                    className="cursor-pointer rounded px-3 py-2 text-sm text-gray-900 transition-colors data-focus:bg-[#B2C9AD]/40 dark:text-[#E8EFE6] dark:data-focus:bg-[#4B5945]/40"
                   >
                     All Departments
                   </ListboxOption>
@@ -504,7 +504,7 @@ function CoursesPageInner() {
                     <ListboxOption
                       key={dept}
                       value={dept}
-                      className="cursor-pointer rounded px-3 py-2 text-sm text-gray-900 transition-colors data-focus:bg-[#B2C9AD]/40"
+                      className="cursor-pointer rounded px-3 py-2 text-sm text-gray-900 transition-colors data-focus:bg-[#B2C9AD]/40 dark:text-[#E8EFE6] dark:data-focus:bg-[#4B5945]/40"
                     >
                       {dept}
                     </ListboxOption>
@@ -522,47 +522,47 @@ function CoursesPageInner() {
                 <ListboxOptions
                   anchor="bottom"
                   transition
-                  className="z-10 origin-top rounded-lg border border-gray-200 bg-white p-1 shadow-lg transition duration-200 ease-out data-closed:scale-95 data-closed:opacity-0"
+                  className="z-10 origin-top rounded-lg border border-gray-200 bg-white p-1 shadow-lg transition duration-200 ease-out data-closed:scale-95 data-closed:opacity-0 dark:border-[#374033] dark:bg-[#232A1F]"
                 >
                   <ListboxOption
                     value=""
-                    className="cursor-pointer rounded px-3 py-2 text-sm text-gray-900 transition-colors data-focus:bg-[#B2C9AD]/40"
+                    className="cursor-pointer rounded px-3 py-2 text-sm text-gray-900 transition-colors data-focus:bg-[#B2C9AD]/40 dark:text-[#E8EFE6] dark:data-focus:bg-[#4B5945]/40"
                   >
                     None
                   </ListboxOption>
                   <ListboxOption
                     value="code"
-                    className="cursor-pointer rounded px-3 py-2 text-sm text-gray-900 transition-colors data-focus:bg-[#B2C9AD]/40"
+                    className="cursor-pointer rounded px-3 py-2 text-sm text-gray-900 transition-colors data-focus:bg-[#B2C9AD]/40 dark:text-[#E8EFE6] dark:data-focus:bg-[#4B5945]/40"
                   >
                     Code
                   </ListboxOption>
                   <ListboxOption
                     value="name"
-                    className="cursor-pointer rounded px-3 py-2 text-sm text-gray-900 transition-colors data-focus:bg-[#B2C9AD]/40"
+                    className="cursor-pointer rounded px-3 py-2 text-sm text-gray-900 transition-colors data-focus:bg-[#B2C9AD]/40 dark:text-[#E8EFE6] dark:data-focus:bg-[#4B5945]/40"
                   >
                     Name
                   </ListboxOption>
                   <ListboxOption
                     value="rating"
-                    className="cursor-pointer rounded px-3 py-2 text-sm text-gray-900 transition-colors data-focus:bg-[#B2C9AD]/40"
+                    className="cursor-pointer rounded px-3 py-2 text-sm text-gray-900 transition-colors data-focus:bg-[#B2C9AD]/40 dark:text-[#E8EFE6] dark:data-focus:bg-[#4B5945]/40"
                   >
                     Rating
                   </ListboxOption>
                   <ListboxOption
                     value="difficulty"
-                    className="cursor-pointer rounded px-3 py-2 text-sm text-gray-900 transition-colors data-focus:bg-[#B2C9AD]/40"
+                    className="cursor-pointer rounded px-3 py-2 text-sm text-gray-900 transition-colors data-focus:bg-[#B2C9AD]/40 dark:text-[#E8EFE6] dark:data-focus:bg-[#4B5945]/40"
                   >
                     Difficulty
                   </ListboxOption>
                   <ListboxOption
                     value="gpa"
-                    className="cursor-pointer rounded px-3 py-2 text-sm text-gray-900 transition-colors data-focus:bg-[#B2C9AD]/40"
+                    className="cursor-pointer rounded px-3 py-2 text-sm text-gray-900 transition-colors data-focus:bg-[#B2C9AD]/40 dark:text-[#E8EFE6] dark:data-focus:bg-[#4B5945]/40"
                   >
                     Avg Grade
                   </ListboxOption>
                   <ListboxOption
                     value="credits"
-                    className="cursor-pointer rounded px-3 py-2 text-sm text-gray-900 transition-colors data-focus:bg-[#B2C9AD]/40"
+                    className="cursor-pointer rounded px-3 py-2 text-sm text-gray-900 transition-colors data-focus:bg-[#B2C9AD]/40 dark:text-[#E8EFE6] dark:data-focus:bg-[#4B5945]/40"
                   >
                     Credits
                   </ListboxOption>
@@ -581,17 +581,17 @@ function CoursesPageInner() {
                   <ListboxOptions
                     anchor="bottom"
                     transition
-                    className="z-10 origin-top rounded-lg border border-gray-200 bg-white p-1 shadow-lg transition duration-200 ease-out data-closed:scale-95 data-closed:opacity-0"
+                    className="z-10 origin-top rounded-lg border border-gray-200 bg-white p-1 shadow-lg transition duration-200 ease-out data-closed:scale-95 data-closed:opacity-0 dark:border-[#374033] dark:bg-[#232A1F]"
                   >
                     <ListboxOption
                       value="asc"
-                      className="cursor-pointer rounded px-3 py-2 text-sm text-gray-900 transition-colors data-focus:bg-[#B2C9AD]/40"
+                      className="cursor-pointer rounded px-3 py-2 text-sm text-gray-900 transition-colors data-focus:bg-[#B2C9AD]/40 dark:text-[#E8EFE6] dark:data-focus:bg-[#4B5945]/40"
                     >
                       <span className="flex items-center gap-1.5"><ArrowUp size={13} weight="bold" /> Ascending</span>
                     </ListboxOption>
                     <ListboxOption
                       value="desc"
-                      className="cursor-pointer rounded px-3 py-2 text-sm text-gray-900 transition-colors data-focus:bg-[#B2C9AD]/40"
+                      className="cursor-pointer rounded px-3 py-2 text-sm text-gray-900 transition-colors data-focus:bg-[#B2C9AD]/40 dark:text-[#E8EFE6] dark:data-focus:bg-[#4B5945]/40"
                     >
                       <span className="flex items-center gap-1.5"><ArrowDown size={13} weight="bold" /> Descending</span>
                     </ListboxOption>
@@ -611,10 +611,10 @@ function CoursesPageInner() {
                 <ListboxOptions
                   anchor="bottom"
                   transition
-                  className="z-10 origin-top rounded-lg border border-gray-200 bg-white p-4 shadow-lg transition duration-200 ease-out data-closed:scale-95 data-closed:opacity-0"
+                  className="z-10 origin-top rounded-lg border border-gray-200 bg-white p-4 shadow-lg transition duration-200 ease-out data-closed:scale-95 data-closed:opacity-0 dark:border-[#374033] dark:bg-[#232A1F]"
                 >
                   <div className="pointer-events-auto w-48">
-                    <div className="mb-3 text-center text-sm font-medium text-gray-600">
+                    <div className="mb-3 text-center text-sm font-medium text-gray-600 dark:text-[#B2C9AD]">
                       {creditsRange[0]} - {creditsRange[1] === 6 ? "6+" : creditsRange[1]}
                     </div>
                     <Slider
@@ -641,10 +641,10 @@ function CoursesPageInner() {
                 <ListboxOptions
                   anchor="bottom"
                   transition
-                  className="z-10 origin-top rounded-lg border border-gray-200 bg-white p-4 shadow-lg transition duration-200 ease-out data-closed:scale-95 data-closed:opacity-0"
+                  className="z-10 origin-top rounded-lg border border-gray-200 bg-white p-4 shadow-lg transition duration-200 ease-out data-closed:scale-95 data-closed:opacity-0 dark:border-[#374033] dark:bg-[#232A1F]"
                 >
                   <div className="pointer-events-auto w-48">
-                    <div className="mb-3 text-center text-sm font-medium text-gray-600">
+                    <div className="mb-3 text-center text-sm font-medium text-gray-600 dark:text-[#B2C9AD]">
                       {courseLevelRange[0]} - {courseLevelRange[1] === 600 ? "600+" : courseLevelRange[1]}
                     </div>
                     <Slider
@@ -662,7 +662,7 @@ function CoursesPageInner() {
           </aside>
 
           <section className="min-w-0 flex-1">
-            <p className="mb-4 text-sm text-gray-400">
+            <p className="mb-4 text-sm text-gray-400 dark:text-[#66785F]">
               {loading && visibleCourses.length === 0
                 ? "Loading..."
                 : visibleCourses.length < totalCount
@@ -676,7 +676,7 @@ function CoursesPageInner() {
                   {Array.from({ length: 6 }).map((_, i) => (
                     <div
                       key={i}
-                      className="h-28 animate-pulse rounded-xl border border-gray-200 bg-white"
+                      className="h-28 animate-pulse rounded-xl border border-gray-200 bg-white dark:border-[#374033] dark:bg-[#232A1F]"
                     />
                   ))}
                 </>
@@ -697,7 +697,7 @@ function CoursesPageInner() {
                     <button
                       onClick={() => setPage((p) => p + 1)}
                       disabled={loading}
-                      className="rounded-lg border border-gray-300 bg-white px-4 py-3 text-sm font-medium text-gray-700 hover:bg-gray-50 disabled:opacity-50"
+                      className="rounded-lg border border-gray-300 bg-white px-4 py-3 text-sm font-medium text-gray-700 hover:bg-gray-50 disabled:opacity-50 dark:border-[#374033] dark:bg-[#232A1F] dark:text-[#B2C9AD] dark:hover:bg-[#1B2018]"
                     >
                       {loading ? "Loading..." : "Load more"}
                     </button>
@@ -710,7 +710,7 @@ function CoursesPageInner() {
       </div>
 
       <aside
-        className={`fixed bottom-5 left-1/2 z-20 flex w-[min(930px,calc(100%-26px))] -translate-x-1/2 items-center justify-between gap-3 rounded-3xl border border-gray-200 bg-white/95 px-3 py-3 shadow-lg backdrop-blur-sm transition-all duration-300 sm:px-4 ${
+        className={`fixed bottom-5 left-1/2 z-20 flex w-[min(930px,calc(100%-26px))] -translate-x-1/2 items-center justify-between gap-3 rounded-3xl border border-gray-200 bg-white/95 px-3 py-3 shadow-lg backdrop-blur-sm transition-all duration-300 sm:px-4 dark:border-[#374033] dark:bg-[#232A1F]/95 ${
           selectedForCompare.size > 0
             ? "translate-y-0 opacity-100"
             : "pointer-events-none translate-y-[130%] opacity-0"
@@ -719,7 +719,7 @@ function CoursesPageInner() {
         aria-label="Course comparison selection"
       >
         <div className="flex min-w-0 flex-1 flex-col gap-2 sm:flex-row sm:items-center">
-          <div className="shrink-0 text-sm font-extrabold text-emerald-950">
+          <div className="shrink-0 text-sm font-extrabold text-emerald-950 dark:text-[#B2C9AD]">
             {selectedForCompare.size} of {MAX_COMPARE} selected
           </div>
           <div className="flex flex-wrap gap-2">
@@ -745,7 +745,7 @@ function CoursesPageInner() {
           <button
             type="button"
             onClick={clearComparison}
-            className="rounded-xl border border-gray-300 bg-white px-3 py-2 text-xs font-semibold text-gray-800 shadow-sm hover:bg-gray-50"
+            className="rounded-xl border border-gray-300 bg-white px-3 py-2 text-xs font-semibold text-gray-800 shadow-sm hover:bg-gray-50 dark:border-[#374033] dark:bg-[#1B2018] dark:text-[#B2C9AD] dark:hover:bg-[#374033]"
           >
             Clear
           </button>

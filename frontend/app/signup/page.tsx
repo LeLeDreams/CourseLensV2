@@ -63,7 +63,7 @@ export default function Signup() {
    return (<>
        <div className="flex min-h-0 flex-1 items-center justify-center bg-background">
            <div className="w-[360px]">
-           <div className="bg-white shadow-md rounded-xl border border-[#B2C9AD] p-[45px] text-center">
+           <div className="bg-white shadow-md rounded-xl border border-[#B2C9AD] p-[45px] text-center dark:border-[#374033] dark:bg-[#232A1F]">
 
 
            <form className="space-y-4" onSubmit={handleSignup}>
@@ -73,21 +73,21 @@ export default function Signup() {
                    placeholder="Name"
                    value={name}
                    onChange={(n) => setName(n.target.value)}
-                   className="w-full rounded-lg border border-[#B2C9AD] bg-white p-[15px] text-sm outline-none text-[#474747] focus:border-[#91AC8F] transition-colors"
+                   className="w-full rounded-lg border border-[#B2C9AD] bg-white p-[15px] text-sm outline-none text-[#474747] focus:border-[#91AC8F] transition-colors dark:border-[#374033] dark:bg-[#1B2018] dark:text-[#E8EFE6] dark:placeholder-[#66785F]"
                />
                <input
                    type="email"
                    placeholder="Email"
                    value={email}
                    onChange={(e) => setEmail(e.target.value)}
-                   className="w-full rounded-lg border border-[#B2C9AD] bg-white p-[15px] text-sm outline-none text-[#474747] focus:border-[#91AC8F] transition-colors"
+                   className="w-full rounded-lg border border-[#B2C9AD] bg-white p-[15px] text-sm outline-none text-[#474747] focus:border-[#91AC8F] transition-colors dark:border-[#374033] dark:bg-[#1B2018] dark:text-[#E8EFE6] dark:placeholder-[#66785F]"
                />
                <input
                    type="password"
                    placeholder="Password"
                    value={password}
                    onChange={(p) => setPassword(p.target.value)}
-                   className="w-full rounded-lg border border-[#B2C9AD] bg-white p-[15px] text-sm outline-none text-[#474747] focus:border-[#91AC8F] transition-colors"
+                   className="w-full rounded-lg border border-[#B2C9AD] bg-white p-[15px] text-sm outline-none text-[#474747] focus:border-[#91AC8F] transition-colors dark:border-[#374033] dark:bg-[#1B2018] dark:text-[#E8EFE6] dark:placeholder-[#66785F]"
                />
                <button className="w-full bg-[#4B5945] text-white py-[15px] rounded-lg font-semibold hover:bg-[#66785F] transition">
                 Create Account
@@ -95,7 +95,7 @@ export default function Signup() {
                 {message && (
                    <p className="text-sm text-gray-600">{message}</p>
                 )}
-               <p className="text-[#898989] text-xs mt-4">
+               <p className="text-[#898989] text-xs mt-4 dark:text-[#91AC8F]">
                    Already registered?{" "}
                    <Link href="/login" className="text-[#4B5945] no-underline hover:text-[#66785F] transition">
                        Sign In

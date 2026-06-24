@@ -25,8 +25,14 @@ export default function RootLayout({
     <html
       lang="en"
       className={`${inter.variable} h-full antialiased`}
+      suppressHydrationWarning
     >
       <body className="flex min-h-screen flex-col">
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `(function(){try{var t=localStorage.getItem('theme');if(t==='dark')document.documentElement.classList.add('dark')}catch(e){}})()`,
+          }}
+        />
         <ToastProvider>
           <AppProviders>
             <SiteHeader />

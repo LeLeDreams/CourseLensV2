@@ -59,7 +59,7 @@ export default function CourseSummaryCard({
     });
   }
   return (
-    <div className="relative rounded-xl border border-gray-200 bg-white shadow-sm transition-shadow hover:shadow-md">
+    <div className="relative rounded-xl border border-gray-200 bg-white shadow-sm transition-shadow hover:shadow-md dark:border-[#374033] dark:bg-[#232A1F] dark:hover:shadow-[#374033]/50">
       {selectable && (
         <label
           className="absolute left-3 top-3 z-10 inline-flex cursor-pointer items-center"
@@ -72,7 +72,7 @@ export default function CourseSummaryCard({
             checked={selected}
             onClick={(e) => e.stopPropagation()}
             onChange={() => onToggleSelect?.(course.id)}
-            className="h-3.5 w-3.5 rounded border-gray-300 text-blue-600 focus:ring-blue-500"
+            className="h-3.5 w-3.5 rounded border-gray-300 text-[#4B5945] focus:ring-[#91AC8F] dark:border-[#374033] dark:bg-[#1B2018]"
           />
         </label>
       )}
@@ -84,18 +84,18 @@ export default function CourseSummaryCard({
       >
         <div className="flex items-start justify-between">
           <div>
-            <span className="rounded-full bg-blue-100 px-2 py-1 text-xs font-semibold text-blue-700">
+            <span className="rounded-full bg-[#B2C9AD]/50 px-2 py-1 text-xs font-semibold text-[#4B5945] dark:bg-[#4B5945]/50 dark:text-[#B2C9AD]">
               {course.code}
             </span>
-            <h3 className="mt-2 text-lg font-semibold text-gray-900">{course.name}</h3>
-            <p className="text-sm text-gray-500">{course.professor}</p>
+            <h3 className="mt-2 text-lg font-semibold text-gray-900 dark:text-[#E8EFE6]">{course.name}</h3>
+            <p className="text-sm text-gray-500 dark:text-[#91AC8F]">{course.professor}</p>
           </div>
           <div className="text-right">
-            <div className="text-2xl font-bold text-blue-600">{(course.rating ?? 0.0).toFixed(1)}</div>
-            <div className="text-xs text-gray-400">/ 5.0</div>
+            <div className="text-2xl font-bold text-[#4B5945] dark:text-[#91AC8F]">{(course.rating ?? 0.0).toFixed(1)}</div>
+            <div className="text-xs text-gray-400 dark:text-[#66785F]">/ 5.0</div>
           </div>
         </div>
-        <div className="mt-4 flex gap-6 text-sm text-gray-500">
+        <div className="mt-4 flex gap-6 text-sm text-gray-500 dark:text-[#91AC8F]">
           <span>
             Difficulty: <strong>{(course.difficulty?? 0.0).toFixed(1)}/5</strong>
           </span>
