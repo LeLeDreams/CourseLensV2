@@ -27,7 +27,6 @@ const PLOT_OPTIONS: { value: ComparePlotType; label: string }[] = [
 ];
 
 const GRADE_DISTRIBUTION_LABELS = ["A", "A-", "B+", "B", "B-", "C+", "C", "D/F"] as const;
-
 const HOURS_LABELS = ["0–5", "6–10", "11–15", "16–20", "21+"] as const;
 
 type EvalRow = {
@@ -65,10 +64,7 @@ function uniqueOrderedIds(ids: number[]): number[] {
 function bestIndices(values: number[], mode: "max" | "min"): number[] {
   if (values.length === 0) return [];
   const target = mode === "max" ? Math.max(...values) : Math.min(...values);
-  return values
-    .map((v, i) => ({ v, i }))
-    .filter((item) => item.v === target)
-    .map((item) => item.i);
+  return values.map((v, i) => ({ v, i })).filter((item) => item.v === target).map((item) => item.i);
 }
 
 function normalizeGrade(grade: string | null): string | null {
@@ -80,28 +76,17 @@ function normalizeGrade(grade: string | null): string | null {
 
 function gradeToPoints(letter: string): number {
   switch (letter) {
-    case "A":
-      return 4.0;
-    case "A-":
-      return 3.7;
-    case "B+":
-      return 3.3;
-    case "B":
-      return 3.0;
-    case "B-":
-      return 2.7;
-    case "C+":
-      return 2.3;
-    case "C":
-      return 2.0;
-    case "C-":
-      return 1.7;
-    case "D+":
-      return 1.3;
-    case "D":
-      return 1.0;
-    default:
-      return 0.0;
+    case "A": return 4.0;
+    case "A-": return 3.7;
+    case "B+": return 3.3;
+    case "B": return 3.0;
+    case "B-": return 2.7;
+    case "C+": return 2.3;
+    case "C": return 2.0;
+    case "C-": return 1.7;
+    case "D+": return 1.3;
+    case "D": return 1.0;
+    default: return 0.0;
   }
 }
 
@@ -136,13 +121,8 @@ function buildDistribution(grades: (string | null)[]): { distribution: number[];
     counts[gradeBucketIndex(grade)] += 1;
   }
   const sampleSize = counts.reduce((sum, count) => sum + count, 0);
-  if (sampleSize === 0) {
-    return { distribution: new Array(GRADE_DISTRIBUTION_LABELS.length).fill(0), sampleSize: 0 };
-  }
-  return {
-    distribution: counts.map((count) => (count / sampleSize) * 100),
-    sampleSize,
-  };
+  if (sampleSize === 0) return { distribution: new Array(GRADE_DISTRIBUTION_LABELS.length).fill(0), sampleSize: 0 };
+  return { distribution: counts.map((count) => (count / sampleSize) * 100), sampleSize };
 }
 
 function plotMetaFromRows(rows: EvalRow[], plot: ComparePlotType): { values: number[]; labels: string[]; footnote: string } {
@@ -152,10 +132,7 @@ function plotMetaFromRows(rows: EvalRow[], plot: ComparePlotType): { values: num
     return {
       values: distribution,
       labels: [...GRADE_DISTRIBUTION_LABELS],
-      footnote:
-        sampleSize > 0
-          ? "Percent of evaluations with a letter grade, bucketed as shown."
-          : "No letter grades in evaluations yet.",
+      footnote: sampleSize > 0 ? "Percent of evaluations with a letter grade, bucketed as shown." : "No letter grades in evaluations yet.",
     };
   }
 
@@ -169,14 +146,10 @@ function plotMetaFromRows(rows: EvalRow[], plot: ComparePlotType): { values: num
       map[r.semester].push(gradeToPoints(g));
     }
     const sorted = Object.entries(map)
-      .map(([semester, vals]) => ({
-        semester,
-        value: vals.reduce((a, b) => a + b, 0) / vals.length,
-      }))
+      .map(([semester, vals]) => ({ semester, value: vals.reduce((a, b) => a + b, 0) / vals.length }))
       .sort((a, b) => semesterSortValue(a.semester) - semesterSortValue(b.semester));
-    const values = sorted.map((x) => (x.value / 4) * 100);
     return {
-      values,
+      values: sorted.map((x) => (x.value / 4) * 100),
       labels: sorted.map((x) => x.semester),
       footnote: "Average letter-grade points by term (normalized for bar height).",
     };
@@ -192,11 +165,7 @@ function plotMetaFromRows(rows: EvalRow[], plot: ComparePlotType): { values: num
       map[r.professor_name].push(gradeToPoints(g));
     }
     const entries = Object.entries(map)
-      .map(([name, vals]) => ({
-        name,
-        n: vals.length,
-        value: vals.reduce((a, b) => a + b, 0) / vals.length,
-      }))
+      .map(([name, vals]) => ({ name, n: vals.length, value: vals.reduce((a, b) => a + b, 0) / vals.length }))
       .sort((a, b) => b.n - a.n)
       .slice(0, 8);
     return {
@@ -218,9 +187,8 @@ function plotMetaFromRows(rows: EvalRow[], plot: ComparePlotType): { values: num
       else buckets[4]++;
     }
     const max = Math.max(...buckets, 1);
-    const values = buckets.map((c) => (c / max) * 100);
     return {
-      values,
+      values: buckets.map((c) => (c / max) * 100),
       labels: [...HOURS_LABELS],
       footnote: "Count of reviews reporting hours per week (bucketed).",
     };
@@ -236,13 +204,12 @@ function plotMetaFromRows(rows: EvalRow[], plot: ComparePlotType): { values: num
     map[key].push(gradeToPoints(g));
   }
   const order = ["1", "2", "3", "4", "5"];
-  const values = order.map((k) => {
-    const vals = map[k];
-    if (!vals?.length) return 0;
-    return ((vals.reduce((a, b) => a + b, 0) / vals.length) / 4) * 100;
-  });
   return {
-    values,
+    values: order.map((k) => {
+      const vals = map[k];
+      if (!vals?.length) return 0;
+      return ((vals.reduce((a, b) => a + b, 0) / vals.length) / 4) * 100;
+    }),
     labels: order.map((k) => `Diff ${k}`),
     footnote: "Average letter-grade points by rounded difficulty (1–5).",
   };
@@ -250,48 +217,23 @@ function plotMetaFromRows(rows: EvalRow[], plot: ComparePlotType): { values: num
 
 function plotRowLabel(plot: ComparePlotType): string {
   switch (plot) {
-    case "distribution":
-      return "Grade distribution";
-    case "over-time":
-      return "Grade over time";
-    case "per-instructor":
-      return "Grade per instructor";
-    case "hours":
-      return "Hours per week";
-    case "difficulty-grade":
-      return "Difficulty vs grade";
-    default:
-      return "Chart";
+    case "distribution": return "Grade distribution";
+    case "over-time": return "Grade over time";
+    case "per-instructor": return "Grade per instructor";
+    case "hours": return "Hours per week";
+    case "difficulty-grade": return "Difficulty vs grade";
+    default: return "Chart";
   }
 }
 
-function MiniBarsChart({ values, onClick }: { values: number[]; onClick?: () => void }) {
-  const max = Math.max(...values, 1);
-  const inner = (
-    <div className="flex h-[42px] max-w-[145px] items-end gap-1">
-      {values.map((v, i) => (
-        <span
-          key={i}
-          className="w-3 rounded-t-sm bg-gradient-to-b from-sky-300 to-blue-600"
-          style={{ height: `${Math.max(8, Math.round((v / max) * 100))}%` }}
-        />
-      ))}
-    </div>
-  );
-  if (onClick) {
-    return (
-      <button
-        type="button"
-        onClick={onClick}
-        className="cursor-pointer rounded-lg border border-blue-200 bg-sky-50/80 p-2 text-left transition-colors hover:border-blue-400"
-      >
-        {inner}
-        <div className="mt-1 text-[0.74rem] text-slate-600">Click to expand</div>
-      </button>
-    );
-  }
-  return inner;
-}
+// ── Palette constants ────────────────────────────────────────────────────────
+
+const COURSE_COLORS = [
+  { bar: "#4B5945", light: "#E8EFE6", border: "#91AC8F" },
+  { bar: "#66785F", light: "#f0f4ef", border: "#B2C9AD" },
+  { bar: "#8B9E7A", light: "#eef3ec", border: "#B2C9AD" },
+  { bar: "#374033", light: "#e4ebe2", border: "#66785F" },
+];
 
 export default function CourseCompareView({ initialSelectedIds }: CourseCompareViewProps) {
   const selectedIds = useMemo(() => uniqueOrderedIds(initialSelectedIds), [initialSelectedIds]);
@@ -304,31 +246,20 @@ export default function CourseCompareView({ initialSelectedIds }: CourseCompareV
     plot: ComparePlotType;
     values: number[];
     labels: string[];
+    colorIdx: number;
   } | null>(null);
 
   useEffect(() => {
     async function load() {
-      if (selectedIds.length === 0) {
-        setCourses([]);
-        setLoading(false);
-        return;
-      }
-
+      if (selectedIds.length === 0) { setCourses([]); setLoading(false); return; }
       const [{ data: metricsData, error: metricsError }, { data: evalData, error: evalError }] =
         await Promise.all([
           supabase.from("course_metrics").select("*").in("id", selectedIds),
-          supabase
-            .from("course_evaluations")
+          supabase.from("course_evaluations")
             .select("course_id, grade, semester, professor_name, rating, difficulty, hours_per_week")
             .in("course_id", selectedIds),
         ]);
-
-      if (metricsError || evalError || !metricsData) {
-        setCourses([]);
-        setLoading(false);
-        return;
-      }
-
+      if (metricsError || evalError || !metricsData) { setCourses([]); setLoading(false); return; }
       const rows = (evalData ?? []) as EvalRow[];
       const rowsByCourse = new Map<number, EvalRow[]>();
       for (const row of rows) {
@@ -336,7 +267,6 @@ export default function CourseCompareView({ initialSelectedIds }: CourseCompareV
         list.push(row);
         rowsByCourse.set(row.course_id, list);
       }
-
       const byId = new Map((metricsData as Course[]).map((c) => [c.id, c]));
       const ordered: CompareCourse[] = [];
       for (const id of selectedIds) {
@@ -353,16 +283,14 @@ export default function CourseCompareView({ initialSelectedIds }: CourseCompareV
     load();
   }, [selectedIds]);
 
-  const openModal = useCallback((course: CompareCourse) => {
+  const openModal = useCallback((course: CompareCourse, colorIdx: number) => {
     const { values, labels } = plotMetaFromRows(course.evaluationRows, selectedPlot);
-    setModal({ course, plot: selectedPlot, values, labels });
+    setModal({ course, plot: selectedPlot, values, labels, colorIdx });
   }, [selectedPlot]);
 
   useEffect(() => {
     if (!modal) return;
-    const onKey = (e: KeyboardEvent) => {
-      if (e.key === "Escape") setModal(null);
-    };
+    const onKey = (e: KeyboardEvent) => { if (e.key === "Escape") setModal(null); };
     document.addEventListener("keydown", onKey);
     return () => document.removeEventListener("keydown", onKey);
   }, [modal]);
@@ -372,15 +300,24 @@ export default function CourseCompareView({ initialSelectedIds }: CourseCompareV
     return plotMetaFromRows(courses[0].evaluationRows, selectedPlot).footnote;
   }, [courses, selectedPlot]);
 
-  function ComparisonTable() {
+  // Global max across all courses for the current plot — keeps y-axes comparable
+  const globalMax = useMemo(() => {
+    let max = 1;
+    for (const c of courses) {
+      const { values } = plotMetaFromRows(c.evaluationRows, selectedPlot);
+      for (const v of values) if (v > max) max = v;
+    }
+    return max;
+  }, [courses, selectedPlot]);
+
+  // ── Metrics table ──────────────────────────────────────────────────────────
+
+  function MetricsTable() {
     if (courses.length === 0) return null;
-
-    const compared = courses;
-    const gpaVals = compared.map((c) => c.avg_gpa);
-    const ratingVals = compared.map((c) => c.rating);
-    const diffVals = compared.map((c) => c.difficulty);
-    const reviewVals = compared.map((c) => c.reviews);
-
+    const gpaVals = courses.map((c) => c.avg_gpa);
+    const ratingVals = courses.map((c) => c.rating);
+    const diffVals = courses.map((c) => c.difficulty);
+    const reviewVals = courses.map((c) => c.reviews);
     const bestGpa = bestIndices(gpaVals, "max");
     const bestRating = bestIndices(ratingVals, "max");
     const bestDiff = bestIndices(diffVals, "min");
@@ -388,142 +325,169 @@ export default function CourseCompareView({ initialSelectedIds }: CourseCompareV
 
     function cell(key: Key, content: ReactNode, isBest: boolean) {
       return (
-        <td
-          key={key}
-          className="min-w-[170px] border-b border-emerald-100/80 px-3.5 py-3 text-sm font-semibold text-slate-800"
-        >
+        <td key={key} className="min-w-[160px] border-b border-[#E8EFE6] px-4 py-3 text-sm font-semibold text-gray-800 dark:border-[#374033] dark:text-[#E8EFE6]">
           {isBest ? (
-            <span className="inline-block rounded-lg bg-green-100 px-1.5 py-0.5 font-extrabold text-green-900">
+            <span className="inline-block rounded-lg bg-[#B2C9AD]/50 px-1.5 py-0.5 font-extrabold text-[#4B5945] dark:bg-[#4B5945]/50 dark:text-[#B2C9AD]">
               {content}
             </span>
-          ) : (
-            content
-          )}
+          ) : content}
         </td>
       );
     }
 
     return (
-      <div className="overflow-x-auto rounded-2xl border border-gray-200 bg-white shadow-sm">
-        <div className="flex flex-col gap-2 border-b border-gray-100 bg-slate-50 px-4 py-3 sm:flex-row sm:items-center sm:justify-between">
-          <span className="text-sm font-semibold text-slate-800">Comparison chart</span>
-          <select
-            value={selectedPlot}
-            onChange={(e) => setSelectedPlot(e.target.value as ComparePlotType)}
-            className="w-full max-w-xs rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm text-gray-900"
-            aria-label="Chart type"
-          >
-            {PLOT_OPTIONS.map((o) => (
-              <option key={o.value} value={o.value}>
-                {o.label}
-              </option>
-            ))}
-          </select>
-        </div>
-        <table className="min-w-[700px] w-full border-collapse text-left">
+      <div className="overflow-x-auto rounded-2xl border border-[#B2C9AD] bg-white shadow-sm dark:border-[#374033] dark:bg-[#232A1F]">
+        <table className="min-w-[600px] w-full border-collapse text-left">
           <thead>
             <tr>
-              <th className="sticky left-0 z-[1] w-[230px] border-b border-emerald-100/80 bg-emerald-50/90 px-3.5 py-3 text-left text-xs font-semibold uppercase tracking-wide text-emerald-900">
-                Feature
+              <th className="sticky left-0 z-[1] w-[180px] border-b border-[#B2C9AD] bg-[#E8EFE6]/80 px-4 py-3 text-xs font-semibold uppercase tracking-wide text-[#4B5945] dark:border-[#374033] dark:bg-[#1B2018] dark:text-[#91AC8F]">
+                Metric
               </th>
-              {compared.map((c) => (
-                <th
-                  key={c.id}
-                  className="border-b border-emerald-100/80 bg-slate-50 px-3.5 py-3 text-sm text-slate-800"
-                >
-                  <Link
-                    href={`/courses/${c.id}`}
-                    className="font-bold text-blue-600 hover:underline"
-                  >
-                    {c.code}
-                  </Link>
-                  <div className="mt-0.5 text-xs font-normal text-slate-500">{c.professor}</div>
-                </th>
-              ))}
+              {courses.map((c, idx) => {
+                const col = COURSE_COLORS[idx % COURSE_COLORS.length];
+                return (
+                  <th key={c.id} className="border-b border-[#B2C9AD] bg-[#E8EFE6]/40 px-4 py-3 dark:border-[#374033] dark:bg-[#1B2018]">
+                    <div className="flex items-center gap-2">
+                      <span className="h-3 w-3 shrink-0 rounded-sm" style={{ background: col.bar }} />
+                      <div>
+                        <Link href={`/courses/${c.id}`} className="text-sm font-bold text-[#4B5945] hover:text-[#66785F] hover:underline dark:text-[#91AC8F] dark:hover:text-[#B2C9AD]">
+                          {c.code}
+                        </Link>
+                        <div className="text-xs font-normal text-[#91AC8F] dark:text-[#66785F]">{c.professor}</div>
+                      </div>
+                    </div>
+                  </th>
+                );
+              })}
             </tr>
           </thead>
           <tbody>
             <tr>
-              <td className="sticky left-0 z-[1] border-b border-emerald-100/80 bg-slate-50/95 px-3.5 py-3 text-sm font-bold text-emerald-900">
-                Avg. GPA
-              </td>
-              {compared.map((c, idx) =>
-                cell(
-                  c.id,
-                  `${gpaToLetter(c.avg_gpa)} (${c.avg_gpa > 0 ? c.avg_gpa.toFixed(2) : "—"})`,
-                  bestGpa.includes(idx)
-                )
-              )}
+              <td className="sticky left-0 z-[1] border-b border-[#E8EFE6] bg-[#E8EFE6]/60 px-4 py-3 text-sm font-bold text-[#4B5945] dark:border-[#374033] dark:bg-[#1B2018] dark:text-[#91AC8F]">Avg. GPA</td>
+              {courses.map((c, idx) => cell(c.id, `${gpaToLetter(c.avg_gpa)} (${c.avg_gpa > 0 ? c.avg_gpa.toFixed(2) : "—"})`, bestGpa.includes(idx)))}
             </tr>
             <tr>
-              <td className="sticky left-0 z-[1] border-b border-emerald-100/80 bg-slate-50/95 px-3.5 py-3 text-sm font-bold text-emerald-900">
-                Credits
-              </td>
-              {compared.map((c) => (
-                <td
-                  key={c.id}
-                  className="border-b border-emerald-100/80 px-3.5 py-3 text-sm font-semibold text-slate-800"
-                >
+              <td className="sticky left-0 z-[1] border-b border-[#E8EFE6] bg-[#E8EFE6]/60 px-4 py-3 text-sm font-bold text-[#4B5945] dark:border-[#374033] dark:bg-[#1B2018] dark:text-[#91AC8F]">Credits</td>
+              {courses.map((c) => (
+                <td key={c.id} className="border-b border-[#E8EFE6] px-4 py-3 text-sm font-semibold text-gray-800 dark:border-[#374033] dark:text-[#E8EFE6]">
                   {formatCredits(c.credits, c.max_credits)}
                 </td>
               ))}
             </tr>
             <tr>
-              <td className="sticky left-0 z-[1] border-b border-emerald-100/80 bg-slate-50/95 px-3.5 py-3 text-sm font-bold text-emerald-900">
-                {plotRowLabel(selectedPlot)}
-              </td>
-              {compared.map((c) => {
-                const { values } = plotMetaFromRows(c.evaluationRows, selectedPlot);
-                const empty = values.length === 0 || values.every((v) => v === 0);
-                return (
-                  <td
-                    key={c.id}
-                    className="border-b border-emerald-100/80 px-3.5 py-3 text-sm font-semibold text-slate-800"
-                  >
-                    {empty ? (
-                      <span className="text-xs text-slate-400">No data</span>
-                    ) : (
-                      <MiniBarsChart values={values} onClick={() => openModal(c)} />
-                    )}
-                  </td>
-                );
-              })}
+              <td className="sticky left-0 z-[1] border-b border-[#E8EFE6] bg-[#E8EFE6]/60 px-4 py-3 text-sm font-bold text-[#4B5945] dark:border-[#374033] dark:bg-[#1B2018] dark:text-[#91AC8F]">Overall rating</td>
+              {courses.map((c, idx) => cell(c.id, `${c.rating.toFixed(1)} / 5`, bestRating.includes(idx)))}
             </tr>
             <tr>
-              <td className="sticky left-0 z-[1] border-b border-emerald-100/80 bg-slate-50/95 px-3.5 py-3 text-sm font-bold text-emerald-900">
-                Overall rating
-              </td>
-              {compared.map((c, idx) =>
-                cell(c.id, `${c.rating.toFixed(1)} / 5`, bestRating.includes(idx))
-              )}
+              <td className="sticky left-0 z-[1] border-b border-[#E8EFE6] bg-[#E8EFE6]/60 px-4 py-3 text-sm font-bold text-[#4B5945] dark:border-[#374033] dark:bg-[#1B2018] dark:text-[#91AC8F]">Difficulty</td>
+              {courses.map((c, idx) => cell(c.id, `${c.difficulty.toFixed(1)} / 5`, bestDiff.includes(idx)))}
             </tr>
             <tr>
-              <td className="sticky left-0 z-[1] border-b border-emerald-100/80 bg-slate-50/95 px-3.5 py-3 text-sm font-bold text-emerald-900">
-                Difficulty
-              </td>
-              {compared.map((c, idx) =>
-                cell(c.id, `${c.difficulty.toFixed(1)} / 5`, bestDiff.includes(idx))
-              )}
-            </tr>
-            <tr>
-              <td className="sticky left-0 z-[1] bg-slate-50/95 px-3.5 py-3 text-sm font-bold text-emerald-900">
-                Reviews
-              </td>
-              {compared.map((c, idx) =>
-                cell(c.id, String(c.reviews), bestReviews.includes(idx))
-              )}
+              <td className="sticky left-0 z-[1] bg-[#E8EFE6]/60 px-4 py-3 text-sm font-bold text-[#4B5945] dark:bg-[#1B2018] dark:text-[#91AC8F]">Reviews</td>
+              {courses.map((c, idx) => cell(c.id, String(c.reviews), bestReviews.includes(idx)))}
             </tr>
           </tbody>
         </table>
-        <p className="border-t border-gray-100 px-4 py-2 text-xs text-slate-500">{plotFootnote}</p>
       </div>
     );
   }
 
+  // ── Side-by-side charts ────────────────────────────────────────────────────
+
+  function CompareCharts() {
+    if (courses.length === 0) return null;
+
+    return (
+      <div className="rounded-2xl border border-[#B2C9AD] bg-white shadow-sm dark:border-[#374033] dark:bg-[#232A1F]">
+        {/* Header + chart selector */}
+        <div className="flex flex-col gap-2 border-b border-[#E8EFE6] px-4 py-3 sm:flex-row sm:items-center sm:justify-between dark:border-[#374033]">
+          <div>
+            <span className="text-sm font-semibold text-[#4B5945] dark:text-[#B2C9AD]">{plotRowLabel(selectedPlot)}</span>
+            <p className="text-xs text-[#91AC8F] dark:text-[#66785F]">All bars share the same scale — heights are directly comparable</p>
+          </div>
+          <select
+            value={selectedPlot}
+            onChange={(e) => setSelectedPlot(e.target.value as ComparePlotType)}
+            className="w-full max-w-xs rounded-lg border border-[#B2C9AD] bg-white px-3 py-2 text-sm text-[#4B5945] dark:border-[#374033] dark:bg-[#1B2018] dark:text-[#E8EFE6]"
+            aria-label="Chart type"
+          >
+            {PLOT_OPTIONS.map((o) => (
+              <option key={o.value} value={o.value}>{o.label}</option>
+            ))}
+          </select>
+        </div>
+
+        {/* Charts row */}
+        <div className="grid divide-x divide-[#E8EFE6] overflow-x-auto dark:divide-[#374033]" style={{ gridTemplateColumns: `repeat(${courses.length}, minmax(180px, 1fr))` }}>
+          {courses.map((c, idx) => {
+            const { values, labels } = plotMetaFromRows(c.evaluationRows, selectedPlot);
+            const empty = values.length === 0 || values.every((v) => v === 0);
+            const col = COURSE_COLORS[idx % COURSE_COLORS.length];
+
+            return (
+              <div key={c.id} className="flex flex-col p-4">
+                {/* Course header */}
+                <div className="mb-3 flex items-center gap-2">
+                  <span className="h-3 w-3 shrink-0 rounded-sm" style={{ background: col.bar }} />
+                  <div className="min-w-0">
+                    <Link href={`/courses/${c.id}`} className="block truncate text-sm font-bold text-[#4B5945] hover:text-[#66785F] hover:underline dark:text-[#91AC8F] dark:hover:text-[#B2C9AD]">
+                      {c.code}
+                    </Link>
+                    <p className="truncate text-xs text-[#91AC8F] dark:text-[#66785F]">{c.name}</p>
+                  </div>
+                </div>
+
+                {empty ? (
+                  <div className="flex h-[180px] items-center justify-center rounded-xl bg-[#E8EFE6]/40 text-xs text-[#91AC8F] dark:bg-[#1B2018] dark:text-[#374033]">
+                    No data
+                  </div>
+                ) : (
+                  <>
+                    <button
+                      type="button"
+                      onClick={() => openModal(c, idx)}
+                      className="group flex h-[180px] w-full cursor-pointer items-end gap-[3px] rounded-xl border border-[#B2C9AD]/50 bg-[#E8EFE6]/30 p-2 pb-1 transition-colors hover:border-[#91AC8F] hover:bg-[#E8EFE6]/60 dark:border-[#374033] dark:bg-[#1B2018] dark:hover:border-[#66785F]"
+                      title="Click to expand"
+                      aria-label={`Expand ${c.code} chart`}
+                    >
+                      {values.map((v, i) => {
+                        const h = Math.max(3, Math.round((v / globalMax) * 148));
+                        return (
+                          <div key={i} className="flex flex-1 flex-col items-center justify-end gap-0.5">
+                            <div
+                              className="w-full rounded-t-sm"
+                              style={{ height: `${h}px`, background: col.bar }}
+                            />
+                            <span className="line-clamp-1 w-full text-center text-[0.58rem] leading-tight text-[#66785F] dark:text-[#91AC8F]">
+                              {labels[i]}
+                            </span>
+                          </div>
+                        );
+                      })}
+                    </button>
+                    <p className="mt-1.5 text-center text-[0.68rem] text-[#91AC8F] dark:text-[#66785F]">
+                      {c.evaluationRows.length} evaluation{c.evaluationRows.length === 1 ? "" : "s"} · click to expand
+                    </p>
+                  </>
+                )}
+              </div>
+            );
+          })}
+        </div>
+
+        <p className="border-t border-[#E8EFE6] px-4 py-2 text-xs text-[#91AC8F] dark:border-[#374033] dark:text-[#66785F]">
+          {plotFootnote}
+        </p>
+      </div>
+    );
+  }
+
+  // ── Loading / error states ─────────────────────────────────────────────────
+
   if (loading) {
     return (
       <div className="flex min-h-[50vh] flex-1 items-center justify-center bg-background">
-        <p className="text-gray-500">Loading comparison…</p>
+        <p className="text-[#91AC8F]">Loading comparison…</p>
       </div>
     );
   }
@@ -532,18 +496,15 @@ export default function CourseCompareView({ initialSelectedIds }: CourseCompareV
     return (
       <div className="min-h-full flex-1 bg-background">
         <main className="mx-auto max-w-2xl px-4 py-12">
-          <Link href="/courses" className="mb-6 inline-flex items-center gap-1.5 text-sm text-[#4B5945] hover:text-[#66785F] transition-colors">
+          <Link href="/courses" className="mb-6 inline-flex items-center gap-1.5 text-sm text-[#4B5945] transition-colors hover:text-[#66785F] dark:text-[#91AC8F]">
             <ArrowLeft size={14} weight="bold" /> Back to courses
           </Link>
-          <div className="rounded-2xl border border-gray-200 bg-white p-8 shadow-sm">
-            <h1 className="text-xl font-bold text-gray-900">Compare courses</h1>
-            <p className="mt-3 text-sm text-gray-600">
+          <div className="rounded-2xl border border-[#B2C9AD] bg-white p-8 shadow-sm dark:border-[#374033] dark:bg-[#232A1F]">
+            <h1 className="text-xl font-bold text-[#4B5945] dark:text-[#B2C9AD]">Compare courses</h1>
+            <p className="mt-3 text-sm text-gray-600 dark:text-[#91AC8F]">
               Select at least two courses on the browse page, then use <strong>Compare selected</strong>.
             </p>
-            <Link
-              href="/courses"
-              className="mt-6 inline-block rounded-xl bg-blue-600 px-4 py-2.5 text-sm font-semibold text-white hover:bg-blue-700"
-            >
+            <Link href="/courses" className="mt-6 inline-block rounded-xl bg-[#4B5945] px-4 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-[#66785F]">
               Go to browse courses
             </Link>
           </div>
@@ -556,18 +517,15 @@ export default function CourseCompareView({ initialSelectedIds }: CourseCompareV
     return (
       <div className="min-h-full flex-1 bg-background">
         <main className="mx-auto max-w-2xl px-4 py-12">
-          <Link href="/courses" className="mb-6 inline-flex items-center gap-1.5 text-sm text-[#4B5945] hover:text-[#66785F] transition-colors">
+          <Link href="/courses" className="mb-6 inline-flex items-center gap-1.5 text-sm text-[#4B5945] transition-colors hover:text-[#66785F] dark:text-[#91AC8F]">
             <ArrowLeft size={14} weight="bold" /> Back to courses
           </Link>
-          <div className="rounded-2xl border border-amber-200 bg-amber-50/60 p-8 shadow-sm">
-            <h1 className="text-xl font-bold text-gray-900">Could not load comparison</h1>
-            <p className="mt-3 text-sm text-gray-700">
+          <div className="rounded-2xl border border-amber-200 bg-amber-50/60 p-8 shadow-sm dark:border-amber-800 dark:bg-amber-900/20">
+            <h1 className="text-xl font-bold text-gray-900 dark:text-[#E8EFE6]">Could not load comparison</h1>
+            <p className="mt-3 text-sm text-gray-700 dark:text-[#91AC8F]">
               Fewer than two of the selected courses were found. Return to the course list and try again.
             </p>
-            <Link
-              href="/courses"
-              className="mt-6 inline-block rounded-xl bg-blue-600 px-4 py-2.5 text-sm font-semibold text-white hover:bg-blue-700"
-            >
+            <Link href="/courses" className="mt-6 inline-block rounded-xl bg-[#4B5945] px-4 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-[#66785F]">
               Back to browse courses
             </Link>
           </div>
@@ -576,79 +534,83 @@ export default function CourseCompareView({ initialSelectedIds }: CourseCompareV
     );
   }
 
+  // ── Main render ────────────────────────────────────────────────────────────
+
   return (
     <div className="min-h-full flex-1 bg-background pb-10">
       <main className="mx-auto max-w-5xl px-4 py-8">
-        <Link href="/courses" className="mb-6 inline-flex items-center gap-1.5 text-sm text-[#4B5945] hover:text-[#66785F] transition-colors">
+        <Link href="/courses" className="mb-6 inline-flex items-center gap-1.5 text-sm text-[#4B5945] transition-colors hover:text-[#66785F] dark:text-[#91AC8F]">
           <ArrowLeft size={14} weight="bold" /> Back to courses
         </Link>
 
-        <section aria-label="Course comparison">
-          <header className="mb-4">
-            <h1 className="text-2xl font-bold text-gray-900">Compare courses</h1>
-            <p className="mt-1 text-sm text-gray-600">
-              {courses.length} course{courses.length === 1 ? "" : "s"} — metrics and evaluation-based charts.
-            </p>
-          </header>
-          <ComparisonTable />
-        </section>
+        <header className="mb-5">
+          <h1 className="text-2xl font-bold text-[#4B5945] dark:text-[#B2C9AD]">Compare courses</h1>
+          <p className="mt-1 text-sm text-[#91AC8F]">
+            {courses.length} course{courses.length === 1 ? "" : "s"} selected
+          </p>
+        </header>
+
+        <div className="flex flex-col gap-5">
+          <MetricsTable />
+          <CompareCharts />
+        </div>
       </main>
 
+      {/* Expand modal */}
       {modal && (
         <div
-          className="fixed inset-0 z-30 flex items-center justify-center bg-black/55 p-5"
+          className="fixed inset-0 z-30 flex items-center justify-center bg-black/60 p-5"
           role="dialog"
           aria-modal="true"
           aria-label="Chart detail"
-          onClick={(e) => {
-            if (e.target === e.currentTarget) setModal(null);
-          }}
+          onClick={(e) => { if (e.target === e.currentTarget) setModal(null); }}
         >
-          <div className="max-h-[90vh] w-full max-w-[700px] overflow-y-auto rounded-3xl border border-gray-200 bg-white p-5 shadow-2xl">
-            <div className="mb-3 flex items-start justify-between gap-3">
+          <div className="max-h-[90vh] w-full max-w-[700px] overflow-y-auto rounded-3xl border border-[#B2C9AD] bg-white p-6 shadow-2xl dark:border-[#374033] dark:bg-[#232A1F]">
+            <div className="mb-4 flex items-start justify-between gap-3">
               <div>
-                <h3 className="text-lg font-bold text-gray-900">
-                  {modal.course.code} — {plotRowLabel(modal.plot).toLowerCase()}
+                <h3 className="text-lg font-bold text-[#4B5945] dark:text-[#B2C9AD]">
+                  {modal.course.code} — {plotRowLabel(modal.plot)}
                 </h3>
-                <p className="text-sm text-gray-500">
-                  {modal.course.name} · {modal.course.professor}
-                </p>
+                <p className="text-sm text-[#91AC8F]">{modal.course.name} · {modal.course.professor}</p>
               </div>
               <button
                 type="button"
                 onClick={() => setModal(null)}
-                className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-gray-100 text-gray-700 hover:bg-gray-200"
+                className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-[#E8EFE6] text-[#4B5945] hover:bg-[#B2C9AD] transition-colors dark:bg-[#374033] dark:text-[#B2C9AD] dark:hover:bg-[#4B5945]"
                 aria-label="Close"
               >
                 <X size={16} weight="bold" />
               </button>
             </div>
-            <div className="rounded-2xl border border-emerald-100 bg-emerald-50/30 p-4">
-              <div className="flex h-[220px] items-end gap-1.5 border-b-2 border-l-2 border-emerald-400/80 pb-2 pl-2 pt-1">
-                {modal.values.map((value, i) => {
-                  const max = Math.max(...modal.values, 1);
-                  const h = Math.max(8, Math.round((value / max) * 170));
-                  return (
-                    <div
-                      key={i}
-                      className="flex min-w-0 flex-1 flex-col items-center justify-end gap-1.5"
-                    >
-                      <span
-                        className="w-full max-w-[56px] rounded-t-lg bg-gradient-to-b from-sky-400 to-blue-600"
-                        style={{ height: `${h}px` }}
-                      />
-                      <div className="line-clamp-2 text-center text-[0.65rem] font-bold leading-tight text-slate-600">
-                        {modal.labels[i] ?? "—"}
-                      </div>
-                    </div>
-                  );
-                })}
-              </div>
-              <p className="mt-3 text-sm text-slate-600">
+
+            <div className="rounded-2xl border border-[#B2C9AD]/50 bg-[#E8EFE6]/30 p-4 dark:border-[#374033] dark:bg-[#1B2018]">
+              {(() => {
+                const col = COURSE_COLORS[modal.colorIdx % COURSE_COLORS.length];
+                const max = Math.max(...modal.values, 1);
+                return (
+                  <div className="flex h-[240px] items-end gap-2 border-b-2 border-l-2 border-[#B2C9AD] pb-2 pl-2 dark:border-[#374033]">
+                    {modal.values.map((value, i) => {
+                      const h = Math.max(4, Math.round((value / max) * 200));
+                      return (
+                        <div key={i} className="flex min-w-0 flex-1 flex-col items-center justify-end gap-1.5">
+                          <span className="text-[0.65rem] font-semibold text-[#4B5945] dark:text-[#91AC8F]">
+                            {value > 0 ? Math.round(value) + "%" : ""}
+                          </span>
+                          <div className="w-full max-w-[56px] rounded-t-lg" style={{ height: `${h}px`, background: col.bar }} />
+                          <div className="line-clamp-2 w-full text-center text-[0.65rem] font-medium leading-tight text-[#66785F] dark:text-[#91AC8F]">
+                            {modal.labels[i] ?? "—"}
+                          </div>
+                        </div>
+                      );
+                    })}
+                  </div>
+                );
+              })()}
+              <p className="mt-3 text-sm text-[#91AC8F]">
                 {plotMetaFromRows(modal.course.evaluationRows, modal.plot).footnote}
-                {modal.plot === "distribution" && modal.course.gradeSampleSize > 0 ? (
-                  <> Evaluations with a letter grade: {modal.course.gradeSampleSize}.</>
-                ) : null}
+                {modal.plot === "distribution" && modal.course.gradeSampleSize > 0
+                  ? <> Evaluations with a letter grade: {modal.course.gradeSampleSize}.</>
+                  : null}
               </p>
             </div>
           </div>

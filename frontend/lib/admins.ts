@@ -1,5 +1,5 @@
 export const ADMIN_EMAILS = [
-  "llam@umass.edu",
+  "lamnguyenle05@gmail.com",
 ];
 
 export function isAdmin(email: string | null | undefined): boolean {
